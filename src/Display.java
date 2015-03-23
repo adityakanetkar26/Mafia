@@ -12,10 +12,10 @@ import javax.swing.JTextField;
 
 public class Display extends JFrame{
 	
-	LinkedBlockingQueue<String> messages;
+	LinkedBlockingQueue<Message> messages;
 	JTextArea display;
 	
-	public Display(LinkedBlockingQueue<String> msgs){
+	public Display(LinkedBlockingQueue<Message> msgs){
 		super("CS 7270");
 		messages = msgs;
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -35,7 +35,7 @@ public class Display extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				if(!input.getText().equals("")){
 					try {
-						messages.put(input.getText());
+						messages.put(new Message(input.getText(), null));
 					} catch (InterruptedException e) {
 						System.out.println("display fucked up message put");
 						e.printStackTrace();

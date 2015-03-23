@@ -3,18 +3,20 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Engine extends Thread{
 
-	LinkedBlockingQueue<String> messages = new LinkedBlockingQueue<String>();
+	LinkedBlockingQueue<Message> messages = new LinkedBlockingQueue<Message>();
 	
-	private void performAction(String message){
-		System.out.println(message);
+	private void performAction(Message message){
+		System.out.println(message.message);
+		
+		
 	}
 	
 	public void run(){
 		boolean stop = false;
 		while(!stop){
 			try {
-				String message = messages.take();
-				if(message.equals("stop")){
+				Message message = messages.take();
+				if(message.message.equals("stop")){
 					stop = true;
 				}
 				else{
