@@ -7,13 +7,16 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class NetConnection extends Thread{
 	
+	String id;
+	
 	Socket socket;
 	PrintWriter writer;
 	BufferedReader reader;
 	LinkedBlockingQueue<String> messages;
 	
-	public NetConnection(Socket sock, LinkedBlockingQueue<String> msgs){
+	public NetConnection(Socket sock, LinkedBlockingQueue<String> msgs, String identifier){
 		messages = msgs;
+		id = identifier;
 		socket = sock;
 		try{
 			writer = new PrintWriter(socket.getOutputStream(),true);
@@ -26,8 +29,9 @@ public class NetConnection extends Thread{
 		start();
 	}
 	
-	public NetConnection(String ip, int port, LinkedBlockingQueue<String> msgs){
+	public NetConnection(String ip, int port, LinkedBlockingQueue<String> msgs, String identifier){
 		messages = msgs;
+		id = identifier;
 		try{
 			socket = new Socket(ip, port);
 			writer = new PrintWriter(socket.getOutputStream(),true);
@@ -48,7 +52,7 @@ public class NetConnection extends Thread{
 		String input;
 		try{
 			while((input = reader.readLine()) != null){
-				messages.put(input);
+				messages.put(id + "$$" + input);
 			}
 		}
 		catch(Exception e){
