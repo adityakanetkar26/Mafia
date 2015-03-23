@@ -1,11 +1,14 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 
 public class Engine extends Thread{
 
 	LinkedBlockingQueue<Message> messages = new LinkedBlockingQueue<Message>();
+	HashMap<String, Player> players = new HashMap<String, Player>();
 	
-	private void performAction(Message message){
+	protected void performAction(Message message){
 		System.out.println(message.message);
 				
 	}
