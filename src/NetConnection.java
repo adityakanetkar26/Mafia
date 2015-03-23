@@ -52,7 +52,7 @@ public class NetConnection extends Thread{
 			}
 		}
 		catch(Exception e){
-			System.out.println("socket reader bullshit");
+			System.out.println("socket reader cant read");
 			e.printStackTrace();
 		}
 	}

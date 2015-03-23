@@ -10,7 +10,7 @@ public class Main {
 //			isServer = true;
 //		}
 		
-		Engine engine = new Engine();
+		ClientEngine engine = new ClientEngine();
 		engine.start();
 		Display display = new Display(engine.messages);
 

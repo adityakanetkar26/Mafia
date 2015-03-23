@@ -16,7 +16,7 @@ public class ServerListener extends Thread{
 		try {
 			socket = new ServerSocket(40000);
 		} catch (IOException e) {
-			System.out.println("fucking server listener constructor");
+			System.out.println("server listener constructor died");
 			e.printStackTrace();
 		}
 		start();

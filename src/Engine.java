@@ -7,8 +7,7 @@ public class Engine extends Thread{
 	
 	private void performAction(Message message){
 		System.out.println(message.message);
-		
-		
+				
 	}
 	
 	public void run(){
