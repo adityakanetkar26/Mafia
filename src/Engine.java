@@ -6,7 +6,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Engine extends Thread{
 
 	LinkedBlockingQueue<Message> messages = new LinkedBlockingQueue<Message>();
-	HashMap<String, Player> players = new HashMap<String, Player>();
+	GameState state = new GameState();
 	
 	protected void performAction(Message message){
 		System.out.println(message.message);

@@ -27,18 +27,37 @@ public class ServerEngine extends Engine{
 			if(!playerConnections.containsValue(message.source)){
 				playerCounter++;
 				Player newPlayer = new Player(Integer.toString(playerCounter));
-				message.source.sendMessage("player update$"+ newPlayer.id + "$you");
-				for(Player player : players.values()){
-					playerConnections.get(player).sendMessage("player update$"+ newPlayer.id);
-					message.source.sendMessage("player update$"+ player.id);
-				}
-				players.put(Integer.toString(playerCounter), newPlayer);
+				state.addPlayer(newPlayer);
 				playerConnections.put(newPlayer, message.source);
+				message.source.sendMessage("player join$"+ newPlayer.id);
+				state.assignPlayer(newPlayer);
+				
+				for(Player player : state.players.values()){
+					propagatePlayerUpdate(player);
+				}
 				
 			}
 			break;
+			
+		case "player update":
+			state.playerUpdate(tokens[1], tokens[2]);
+			propagatePlayerUpdate(state.players.get(tokens[1]));
+			break;
+			
+		case "game update":
+			
+			break;
+			
 		default: 
 			System.out.println("What the hell even is this");	
 		}//end switch
+	}
+	
+	private void propagatePlayerUpdate(Player player){
+		
+	}
+	
+	private void propagateGameUpdate(){
+		
 	}
 }

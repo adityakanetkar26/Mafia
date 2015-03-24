@@ -2,7 +2,6 @@
 public class ClientEngine extends Engine{
 
 	NetConnection serverConnection;
-	Player self;
 	
 	protected void performAction(Message message){
 		System.out.println("client processing message " + message.message);
@@ -14,11 +13,23 @@ public class ClientEngine extends Engine{
 		case "start server":
 			ServerEngine.startServer();
 			break;
+			
 		case "connect to server":
 			serverConnection = new NetConnection(tokens[1], Integer.parseInt(tokens[2]), messages);
 			serverConnection.sendMessage("player join");
 			break;
+		
+		case "player join":
+			Player player = new Player(tokens[1]);
+			state.self = player;
+			state.addPlayer(player);
+			break;
+			
 		case "player update":
+			state.playerUpdate(tokens[1], tokens[2]);
+			if(message.source != serverConnection){
+				serverConnection.sendMessage("player update$" + state.self.id + "$" + state.getPlayerState(state.self));
+			}
 			break;
 		default: 
 			System.out.println("What the hell even is this");
