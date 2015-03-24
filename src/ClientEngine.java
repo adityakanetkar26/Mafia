@@ -31,6 +31,11 @@ public class ClientEngine extends Engine{
 				serverConnection.sendMessage("player update$" + state.self.id + "$" + state.getPlayerState(state.self));
 			}
 			break;
+			
+		case "game update":
+			
+			break;
+			
 		default: 
 			System.out.println("What the hell even is this");
 		

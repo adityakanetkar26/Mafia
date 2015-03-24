@@ -12,7 +12,7 @@ public class Main {
 		
 		ClientEngine engine = new ClientEngine();
 		engine.start();
-		Display display = new Display(engine.messages);
+		engine.showDisplay();
 
 	}
 

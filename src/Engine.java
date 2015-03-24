@@ -7,10 +7,15 @@ public class Engine extends Thread{
 
 	LinkedBlockingQueue<Message> messages = new LinkedBlockingQueue<Message>();
 	GameState state = new GameState();
+	Display display;
 	
 	protected void performAction(Message message){
 		System.out.println(message.message);
 				
+	}
+	
+	public void showDisplay(){
+		display = new Display(messages, state);
 	}
 	
 	public void run(){
@@ -23,6 +28,9 @@ public class Engine extends Thread{
 				}
 				else{
 					performAction(message);
+					if(display != null){
+						display.updateDisplay();
+					}
 				}
 			} catch (Exception e) {
 				System.out.println("engine fucked up on message");
