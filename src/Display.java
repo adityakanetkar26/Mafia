@@ -6,7 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -15,23 +17,29 @@ public class Display extends JFrame{
 	
 	LinkedBlockingQueue<Message> messages;
 	GameState state;
-	JTextArea display;
+	JTextArea textArea;
+	DisplayPanel displayPanel;
 	
 	public Display(LinkedBlockingQueue<Message> msgs, GameState s){
 		super("CS 7270");
 		messages = msgs;
 		state = s;
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setPreferredSize(new Dimension(800,800));
+		this.setPreferredSize(new Dimension(1000,800));
 		
-		display = new JTextArea();
+		
+		textArea = new JTextArea();
+		JScrollPane textAreaScroll = new JScrollPane(textArea);
+		textArea.setPreferredSize(new Dimension(800,400));
+		textAreaScroll.setPreferredSize(new Dimension(1000,200));
 		JTextField input = new JTextField();
-		display.setBackground(new Color(0,20,40));
-		input.setBackground(new Color(0,20,40));
-		display.setForeground(new Color(250,125,0));
+		displayPanel = new DisplayPanel(state);
+		textArea.setBackground(new Color(0,40,80));
+		input.setBackground(new Color(0,40,80));
+		textArea.setForeground(new Color(250,125,0));
 		input.setForeground(new Color(250,125,0));
 		input.setCaretColor(new Color(200,200,200));
-		display.setEditable(false);
+		textArea.setEditable(false);
 		
 		input.addActionListener(new ActionListener(){
 
@@ -50,8 +58,14 @@ public class Display extends JFrame{
 			
 		});
 		
-		this.add(input, BorderLayout.SOUTH);
-		this.add(display, BorderLayout.CENTER);
+		this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
+		this.add(displayPanel);
+		this.add(textAreaScroll);
+		this.add(input);	
+		
+//		this.add(textArea, BorderLayout.SOUTH);
+//		this.add(input, BorderLayout.SOUTH);	
+//		this.add(displayPanel, BorderLayout.CENTER);
 		
 		this.pack();
 		this.setVisible(true);
@@ -60,9 +74,9 @@ public class Display extends JFrame{
 	}
 	
 	public void updateDisplay(){
-		display.setText("");
+		textArea.setText("");
 		for(Player player : state.players.values()){
-			display.append(player.id + "\n");
+			textArea.append(player.id + "\n");
 		}
 	}
 
