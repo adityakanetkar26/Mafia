@@ -18,7 +18,19 @@ public class GameState {
 		
 	}
 	
-	public String getPlayerState(Player p){
+	public void stateUpdate(String update){
+		
+	}
+	
+	public String getPlayerState(Player player){
+		return getPlayerState(player, player);
+	}
+	
+	public String getPlayerState(Player player, Player observer){
+		return "";
+	}
+	
+	public String getGameState(){
 		return "";
 	}
 }

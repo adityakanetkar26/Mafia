@@ -45,7 +45,8 @@ public class ServerEngine extends Engine{
 			break;
 			
 		case "game update":
-			
+			state.stateUpdate(tokens[1]);
+			propagateGameUpdate();
 			break;
 			
 		default: 
@@ -54,10 +55,14 @@ public class ServerEngine extends Engine{
 	}
 	
 	private void propagatePlayerUpdate(Player player){
-		
+		for(Player observer : playerConnections.keySet()){
+			playerConnections.get(observer).sendMessage(state.getPlayerState(player, observer));
+		}
 	}
 	
 	private void propagateGameUpdate(){
-		
+		for(NetConnection net : playerConnections.values()){
+			net.sendMessage("game update$" + state.getGameState());
+		}
 	}
 }
