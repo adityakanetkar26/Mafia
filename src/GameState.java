@@ -14,11 +14,19 @@ public class GameState {
 		
 	}
 	
-	public void playerUpdate(String id, String update){
+	public void playerUpdateClient(String id, String update){
 		
 	}
 	
-	public void stateUpdate(String update){
+	public void playerUpdateServer(String id, String update){
+		
+	}
+	
+	public void stateUpdateServer(String update){
+		
+	}
+	
+	public void stateUpdateClient(String update){
 		
 	}
 	
@@ -27,10 +35,10 @@ public class GameState {
 	}
 	
 	public String getPlayerState(Player player, Player observer){
-		return "";
+		return "dsadfsadf";
 	}
 	
 	public String getGameState(){
-		return "";
+		return "gdfgdf";
 	}
 }

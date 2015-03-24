@@ -24,28 +24,16 @@ public class ServerEngine extends Engine{
 		switch(tokens[0]){
 		
 		case "player join":
-			if(!playerConnections.containsValue(message.source)){
-				playerCounter++;
-				Player newPlayer = new Player(Integer.toString(playerCounter));
-				state.addPlayer(newPlayer);
-				playerConnections.put(newPlayer, message.source);
-				message.source.sendMessage("player join$"+ newPlayer.id);
-				state.assignPlayer(newPlayer);
-				
-				for(Player player : state.players.values()){
-					propagatePlayerUpdate(player);
-				}
-				
-			}
+			playerJoin(message);
 			break;
 			
 		case "player update":
-			state.playerUpdate(tokens[1], tokens[2]);
+			state.playerUpdateServer(tokens[1], tokens[2]);
 			propagatePlayerUpdate(state.players.get(tokens[1]));
 			break;
 			
 		case "game update":
-			state.stateUpdate(tokens[1]);
+			state.stateUpdateServer(tokens[1]);
 			propagateGameUpdate();
 			break;
 			
@@ -56,13 +44,32 @@ public class ServerEngine extends Engine{
 	
 	private void propagatePlayerUpdate(Player player){
 		for(Player observer : playerConnections.keySet()){
-			playerConnections.get(observer).sendMessage(state.getPlayerState(player, observer));
+			playerConnections.get(observer).sendMessage("player update$" + player.id + "$" + state.getPlayerState(player, observer));
 		}
 	}
 	
 	private void propagateGameUpdate(){
 		for(NetConnection net : playerConnections.values()){
 			net.sendMessage("game update$" + state.getGameState());
+		}
+		for(Player player : state.players.values()){
+			propagatePlayerUpdate(player);
+		}
+	}
+	
+	private void playerJoin(Message message){
+		if(!playerConnections.containsValue(message.source)){
+			playerCounter++;
+			Player newPlayer = new Player(Integer.toString(playerCounter));
+			state.addPlayer(newPlayer);
+			playerConnections.put(newPlayer, message.source);
+			message.source.sendMessage("player join$"+ newPlayer.id);
+			state.assignPlayer(newPlayer);
+			
+			for(Player player : state.players.values()){
+				propagatePlayerUpdate(player);
+			}
+			
 		}
 	}
 }
