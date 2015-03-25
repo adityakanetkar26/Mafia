@@ -97,7 +97,7 @@ public class DisplayPanel extends JPanel{
 	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		int numPlayers = state.players.values.size();
+		int numPlayers = state.players.values().size();
 		int count = 1;
 		int x;
 		int y;
