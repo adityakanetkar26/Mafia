@@ -1,7 +1,10 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.Box;
@@ -18,6 +21,11 @@ public class DisplayPanel extends JPanel{
 	LinkedBlockingQueue<Message> messages;
 	GameState state;
 	JPanel connectPanel;
+	
+	BufferedImage[] civPics;
+	BufferedImage[] mafPics;
+	BufferedImage unknown;
+	HashMap<Player, BufferedImage> playerPics = new HashMap<Player, BufferedImage>();
 	
 	public DisplayPanel(GameState s, LinkedBlockingQueue<Message> msgs){
 		state = s;
@@ -59,6 +67,18 @@ public class DisplayPanel extends JPanel{
 		
 		this.add(connectPanel);
 		
+		playerPics.put(state.self, unknown);
+	}//end constructor
+	
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		int numPlayers = state.players.values.size();
+		for(Player player : state.players.values()){
+			if(!playerPics.containsKey(player)){
+				
+			}
+			
+		}
 	}
 	
 	

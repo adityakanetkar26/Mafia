@@ -74,10 +74,11 @@ public class Display extends JFrame{
 	}
 	
 	public void updateDisplay(){
-		textArea.setText("");
-		for(Player player : state.players.values()){
-			textArea.append(player.id + "\n");
-		}
+		repaint();
+//		textArea.setText("");
+//		for(Player player : state.players.values()){
+//			textArea.append(player.id + "\n");
+//		}
 	}
 
 }
