@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Player {
 	
@@ -16,7 +17,7 @@ public class Player {
 	public String Vote(){
 		//Create GUI to ask the player to vote against another player. 
 		//Get that vote and send to the server
-		String vote; 
+		String vote = "xyz"; 
 		return vote;
 	}
 	

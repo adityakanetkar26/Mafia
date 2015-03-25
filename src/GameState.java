@@ -1,11 +1,9 @@
 import java.util.HashMap;
 import java.util.Random;
-import java.lang.Math;
-
 
 public class GameState {
 
-	HashMap<int, Player> players = new HashMap<int, Player>();
+	HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 	int badPlayerCount;
 	int goodPlayerCount;
 	
@@ -17,7 +15,7 @@ public class GameState {
 	
 	public void assignIdentities(){
 		int totalSize = players.size();
-		badPlayerCount = int(Math.sqrt(double(totalSize)));
+		badPlayerCount = (int)Math.sqrt((double)totalSize);
 		goodPlayerCount = totalSize - badPlayerCount;
 
 		Random randomGenerator = new Random();
@@ -65,6 +63,14 @@ public class GameState {
 	}
 	
 	public String getGameState(){
-		return "gdfgdf";
+		if(badPlayerCount == 0)
+			return "Good Guys Win";
+		else if(goodPlayerCount == 0)
+			return "Bad Guys Win";
+
+		return "Game Still On! Good Luck!";
+	}
+
+	public void updateGameState(){
 	}
 }
