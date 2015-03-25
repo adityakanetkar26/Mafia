@@ -8,6 +8,7 @@ public class Engine extends Thread{
 	LinkedBlockingQueue<Message> messages = new LinkedBlockingQueue<Message>();
 	GameState state = new GameState();
 	Display display;
+	boolean displayDebugs = false;
 	
 	protected void performAction(Message message){
 		System.out.println(message.message);
@@ -23,6 +24,9 @@ public class Engine extends Thread{
 		while(!stop){
 			try {
 				Message message = messages.take();
+				if(display != null && displayDebugs){
+					display.appendMessage("DEBUG: " + message);
+				}
 				if(message.message.equals("stop")){
 					stop = true;
 				}

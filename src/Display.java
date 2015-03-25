@@ -80,5 +80,8 @@ public class Display extends JFrame{
 //			textArea.append(player.id + "\n");
 //		}
 	}
+	public void appendMessage(String s){
+		textArea.append(s);
+	}
 
 }
