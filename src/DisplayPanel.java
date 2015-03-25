@@ -4,9 +4,12 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -30,6 +33,7 @@ public class DisplayPanel extends JPanel{
 	public DisplayPanel(GameState s, LinkedBlockingQueue<Message> msgs){
 		state = s;
 		messages = msgs;
+		loadImages();
 		setBackground(new Color(0,20,40));
 		setPreferredSize(new Dimension(1000,800));
 		
@@ -95,6 +99,20 @@ public class DisplayPanel extends JPanel{
 		}
 	}//end repaint
 	
-	
+	private void loadImages(){
+		mafPics = new BufferedImage[5];
+		civPics = new BufferedImage[5];
+		try {
+			unknown = ImageIO.read(new File("../img/unknown.png"));
+			for(int a = 0; a < mafPics.length; a++){
+				mafPics[a] = ImageIO.read(new File("/img/m" + a + ".png"));
+			}
+			for(int b = 0; b < civPics.length; b++){
+				civPics[b] = ImageIO.read(new File("/img/c" + b + ".png"));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
