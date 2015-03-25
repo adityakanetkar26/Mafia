@@ -33,7 +33,7 @@ public class Display extends JFrame{
 		textArea.setPreferredSize(new Dimension(800,400));
 		textAreaScroll.setPreferredSize(new Dimension(1000,200));
 		JTextField input = new JTextField();
-		displayPanel = new DisplayPanel(state);
+		displayPanel = new DisplayPanel(state, messages);
 		textArea.setBackground(new Color(0,40,80));
 		input.setBackground(new Color(0,40,80));
 		textArea.setForeground(new Color(250,125,0));
