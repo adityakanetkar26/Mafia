@@ -73,13 +73,27 @@ public class DisplayPanel extends JPanel{
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		int numPlayers = state.players.values.size();
+		int count = 1;
+		int x;
+		int y;
+		int radius = Math.min(this.getWidth(), this.getHeight())*1/2;
 		for(Player player : state.players.values()){
 			if(!playerPics.containsKey(player)){
 				
 			}
+			if(player == state.self){
+				x = this.getWidth()/2;
+				y = this.getHeight()/2 + radius;
+			}
+			else{
+				x = (int) (this.getWidth()/2 + Math.cos(Math.PI*2*count/numPlayers - Math.PI/2)*radius);
+				y = (int) (this.getHeight()/2 + Math.sin(Math.PI*2*count/numPlayers - Math.PI/2)*radius);
+				count++;
+			}
+			g.drawImage(playerPics.get(player),x,y,null);
 			
 		}
-	}
+	}//end repaint
 	
 	
 
