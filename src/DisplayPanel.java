@@ -39,25 +39,35 @@ public class DisplayPanel extends JPanel{
 		
 		connectPanel = new JPanel();
 		connectPanel.setLayout(new BoxLayout(connectPanel, BoxLayout.Y_AXIS));
-		connectPanel.add(Box.createVerticalGlue());
+		
+		JPanel connectPanelA = new JPanel();
+		connectPanelA.setLayout(new BoxLayout(connectPanelA, BoxLayout.X_AXIS));
 		JComboBox serverList = new JComboBox(new String[]{"Choose a server...", "Host server", "Vlad's Resnet"});
-		connectPanel.add(serverList);
+		connectPanelA.add(Box.createHorizontalGlue());
+		connectPanelA.add(serverList);
+		JButton connectButtonA = new JButton("Connect");
+		connectPanelA.add(connectButtonA);
+		connectPanelA.add(Box.createHorizontalGlue());
+		
+		JPanel connectPanelB = new JPanel();
+		connectPanelB.setLayout(new BoxLayout(connectPanelB, BoxLayout.X_AXIS));
 		JTextField serverField = new JTextField("...or enter IP adress here.");
+		connectPanelB.add(Box.createHorizontalGlue());
+		connectPanelB.add(serverField);
+		JButton connectButtonB = new JButton("Connect");
+		connectPanelB.add(connectButtonB);
+		connectPanelB.add(Box.createHorizontalGlue());
+		
 		connectPanel.add(Box.createVerticalGlue());
-		connectPanel.add(serverField);
-		JButton connectButton = new JButton("Connect");
-		connectPanel.add(Box.createVerticalGlue());
-		connectPanel.add(connectButton);
-		connectPanel.add(Box.createVerticalGlue());
-		connectButton.addActionListener(new ActionListener(){
+		connectPanel.add(connectPanelA);
+		connectPanel.add(connectPanelB);
+		//connectPanel.add(Box.createVerticalGlue());
+		connectButtonA.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent e) {
 				try {
 					if(serverList.getSelectedItem().equals("Host server")){
 						messages.put(new Message("start server", null));
-					}
-					else if(serverList.getSelectedItem().equals("Choose a server...")){
-						messages.put(new Message("connect to server$" + serverField.getText() + "$" + 40000, null));
 					}
 					else if(serverList.getSelectedItem().equals("Vlad's Resnet")){
 						messages.put(new Message("connect to server$128.61.105.220$40000", null));
@@ -67,11 +77,22 @@ public class DisplayPanel extends JPanel{
 				}
 			}
 			
-		});		
-		
+		});
+
+		connectButtonB.addActionListener(new ActionListener(){
+
+			public void actionPerformed(ActionEvent e) {
+				try {
+					messages.put(new Message("connect to server$" + serverField.getText() + "$" + 40000, null));
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		});
+
 		this.add(connectPanel);
 		
-		playerPics.put(state.self, unknown);
 	}//end constructor
 	
 	public void paintComponent(Graphics g){
