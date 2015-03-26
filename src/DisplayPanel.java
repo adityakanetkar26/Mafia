@@ -1,6 +1,10 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -37,38 +41,19 @@ public class DisplayPanel extends JPanel{
 		setBackground(new Color(0,20,40));
 		//setPreferredSize(new Dimension(1000,600));
 		
-		connectPanel = new JPanel();
-		connectPanel.setBackground(new Color(40,40,40));
-		//connectPanel.setPreferredSize(this.getPreferredSize());
-		connectPanel.setLayout(new BoxLayout(connectPanel, BoxLayout.Y_AXIS));
+		connectPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		connectPanel.setBackground(new Color(100,100,100));
+		//connectPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+		//connectPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+		//connectPanel.setPreferredSize(this.getSize());
+		//connectPanel.setLayout(new BoxLayout(connectPanel, BoxLayout.Y_AXIS));
 		
-		JPanel connectPanelA = new JPanel();
-		connectPanelA.setLayout(new BoxLayout(connectPanelA, BoxLayout.X_AXIS));
 		JComboBox serverList = new JComboBox(new String[]{"Choose a server...", "Host server", "Vlad's Resnet"});
-		connectPanelA.add(Box.createHorizontalGlue());
-		connectPanelA.add(serverList);
 		JButton connectButtonA = new JButton("Connect");
-		connectPanelA.add(connectButtonA);
-		connectPanelA.add(Box.createHorizontalGlue());
-		
-		JPanel connectPanelB = new JPanel();
-		connectPanelB.setLayout(new BoxLayout(connectPanelB, BoxLayout.X_AXIS));
 		JTextField serverField = new JTextField("...or enter IP adress here.");
-		connectPanelB.add(Box.createHorizontalGlue());
-		connectPanelB.add(serverField);
 		JButton connectButtonB = new JButton("Connect");
-		connectPanelB.add(connectButtonB);
-		connectPanelB.add(Box.createHorizontalGlue());
-		
-		connectPanel.add(Box.createVerticalGlue());
-		connectPanel.add(connectPanelA);
-		connectPanel.add(connectPanelB);
-		serverField.setMaximumSize(new Dimension(serverList.getPreferredSize().width, serverField.getMinimumSize().height));
-		serverList.setMaximumSize(new Dimension(serverField.getSize().width, serverField.getMinimumSize().height));
-		connectPanelA.setPreferredSize(new Dimension(1000,50));
-		connectPanelB.setPreferredSize(new Dimension(1000,50));
-		//connectPanel.add(Box.createVerticalStrut(300));
-		
+
 		connectButtonA.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent e) {
@@ -97,7 +82,35 @@ public class DisplayPanel extends JPanel{
 			}
 
 		});
+		JPanel connectTopPanel = new JPanel();
+		connectTopPanel.setBackground(new Color(50,50,50));
+		
+		//connectTopPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, 200));
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.gridwidth = 5;
+		c.weighty = 0.9;
+		connectPanel.add(connectTopPanel,c);
+		
+		c.gridx = 1;
+		c.gridy = 1;
+		c.gridwidth = 1;
+		c.weighty = 0.1;
+		connectPanel.add(serverList, c);
+		
+		c.gridx = 3;
+		connectPanel.add(connectButtonA,c);
+		
+		c.gridx = 1;
+		c.gridy = 2;
+		connectPanel.add(serverField,c);
+		
+		c.gridx = 3;
+		connectPanel.add(connectButtonB, c);
 
+		this.setLayout(new GridLayout(0,1));
 		this.add(connectPanel);
 		
 	}//end constructor
