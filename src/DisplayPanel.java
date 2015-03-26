@@ -1,6 +1,4 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -15,14 +13,11 @@ import java.util.HashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.imageio.ImageIO;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 
@@ -155,21 +150,22 @@ public class DisplayPanel extends JPanel{
 		int count = 1;
 		int x;
 		int y;
-		int radius = Math.min(this.getWidth(), this.getHeight())*1/2;
+		int radius = Math.min(this.getWidth(), this.getHeight())*1/3;
 		for(Player player : state.players.values()){
 			if(!playerPics.containsKey(player)){
 				
 			}
 			if(player == state.self){
 				x = this.getWidth()/2;
-				y = this.getHeight()/2 + radius;
+				y = this.getHeight()/3 + radius;
 			}
 			else{
 				x = (int) (this.getWidth()/2 + Math.cos(Math.PI*2*count/numPlayers - Math.PI/2)*radius);
-				y = (int) (this.getHeight()/2 + Math.sin(Math.PI*2*count/numPlayers - Math.PI/2)*radius);
+				y = (int) (this.getHeight()/3 + Math.sin(Math.PI*2*count/numPlayers - Math.PI/2)*radius);
 				count++;
 			}
-			g.drawImage(playerPics.get(player),x,y,null);
+			BufferedImage img = playerPics.get(player);
+			g.drawImage(img,x,y, Math.min(radius*x/y, img.getWidth()), Math.min(radius, img.getHeight()), null);
 			
 		}
 	}//end repaint
@@ -177,7 +173,6 @@ public class DisplayPanel extends JPanel{
 	private void loadImages(){
 		mafPics = new BufferedImage[2];
 		civPics = new BufferedImage[3];
-		
 		try {
 			//unknown = ImageIO.read(new File("/img/unknown.png"));
 			for(int a = 0; a < mafPics.length; a++){

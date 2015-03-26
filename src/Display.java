@@ -32,8 +32,8 @@ public class Display extends JFrame{
 		JScrollPane textAreaScroll = new JScrollPane(textArea);
 		textArea.setMaximumSize(new Dimension(Integer.MAX_VALUE,400));
 		textArea.setPreferredSize(new Dimension(800,400));
-		textAreaScroll.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
-		textAreaScroll.setPreferredSize(new Dimension(1000,200));
+		textAreaScroll.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
+		textAreaScroll.setPreferredSize(new Dimension(1000,150));
 		JTextField input = new JTextField();
 		input.setMaximumSize(new Dimension(Integer.MAX_VALUE, input.getMinimumSize().height));
 		displayPanel = new DisplayPanel(state, messages);
