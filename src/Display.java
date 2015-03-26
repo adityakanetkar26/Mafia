@@ -1,7 +1,5 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -77,12 +75,19 @@ public class Display extends JFrame{
 	}
 	
 	public void updateDisplay(){
+		displayPanel.updateDisplay();
 		repaint();
 //		textArea.setText("");
 //		for(Player player : state.players.values()){
 //			textArea.append(player.id + "\n");
 //		}
 	}
+	
+//	public void repaint(){
+//		super.repaint();
+//		
+//	}
+	
 	public void appendMessage(String s){
 		textArea.append(s);
 	}

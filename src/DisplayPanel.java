@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.imageio.ImageIO;
@@ -26,10 +27,11 @@ public class DisplayPanel extends JPanel{
 	LinkedBlockingQueue<Message> messages;
 	GameState state;
 	JPanel connectPanel;
+	String displayState = "main menu";
 	
 	BufferedImage[] civPics;
 	BufferedImage[] mafPics;
-	BufferedImage unknown;
+	BufferedImage[] unkPics;
 	HashMap<Player, BufferedImage> playerPics = new HashMap<Player, BufferedImage>();
 	
 	public DisplayPanel(GameState s, LinkedBlockingQueue<Message> msgs){
@@ -153,7 +155,13 @@ public class DisplayPanel extends JPanel{
 		int radius = Math.min(this.getWidth(), this.getHeight())*1/3;
 		for(Player player : state.players.values()){
 			if(!playerPics.containsKey(player)){
-				
+				Random rand = new Random();
+				if(player.goodBad){
+					playerPics.put(player, civPics[rand.nextInt(civPics.length)]);
+				}
+				else if(!player.goodBad){
+					playerPics.put(player, mafPics[rand.nextInt(mafPics.length)]);
+				}
 			}
 			if(player == state.self){
 				x = this.getWidth()/2;
@@ -161,25 +169,38 @@ public class DisplayPanel extends JPanel{
 			}
 			else{
 				x = (int) (this.getWidth()/2 + Math.cos(Math.PI*2*count/numPlayers - Math.PI/2)*radius);
-				y = (int) (this.getHeight()/3 + Math.sin(Math.PI*2*count/numPlayers - Math.PI/2)*radius);
+				y = (int) (this.getHeight()/3 - Math.sin(Math.PI*2*count/numPlayers - Math.PI/2)*radius);
 				count++;
 			}
 			BufferedImage img = playerPics.get(player);
-			g.drawImage(img,x,y, Math.min(radius*x/y, img.getWidth()), Math.min(radius, img.getHeight()), null);
+			g.drawImage(img,x,y, Math.min(radius*img.getWidth()/img.getHeight(), img.getWidth()), Math.min(radius, img.getHeight()), null);
 			
 		}
+		
 	}//end repaint
+	
+	public void updateDisplay(){
+		if(state.players.values().size()>0 && displayState.equals("main menu")){
+			this.remove(connectPanel);
+			displayState = "playing";
+		}
+	}
 	
 	private void loadImages(){
 		mafPics = new BufferedImage[2];
 		civPics = new BufferedImage[3];
+		unkPics = new BufferedImage[1];
 		try {
 			//unknown = ImageIO.read(new File("/img/unknown.png"));
+			
 			for(int a = 0; a < mafPics.length; a++){
 				mafPics[a] = ImageIO.read(new File("img\\m" + a + ".png"));
 			}
 			for(int b = 0; b < civPics.length; b++){
 				civPics[b] = ImageIO.read(new File("img\\c" + b + ".png"));
+			}
+			for(int c = 0; c < unkPics.length; c++){
+				unkPics[c] = ImageIO.read(new File("img\\u" + c + ".png"));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
