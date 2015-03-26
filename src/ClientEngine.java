@@ -20,7 +20,7 @@ public class ClientEngine extends Engine{
 			break;
 		
 		case "player join":
-			Player player = new Player(tokens[1]);
+			Player player = new Player(Integer.parseInt(tokens[1]), tokens[1]);
 			state.self = player;
 			state.addPlayer(player);
 			break;

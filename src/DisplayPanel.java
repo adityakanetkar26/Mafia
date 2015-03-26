@@ -35,9 +35,11 @@ public class DisplayPanel extends JPanel{
 		messages = msgs;
 		loadImages();
 		setBackground(new Color(0,20,40));
-		setPreferredSize(new Dimension(1000,800));
+		//setPreferredSize(new Dimension(1000,600));
 		
 		connectPanel = new JPanel();
+		connectPanel.setBackground(new Color(40,40,40));
+		//connectPanel.setPreferredSize(this.getPreferredSize());
 		connectPanel.setLayout(new BoxLayout(connectPanel, BoxLayout.Y_AXIS));
 		
 		JPanel connectPanelA = new JPanel();
@@ -61,7 +63,12 @@ public class DisplayPanel extends JPanel{
 		connectPanel.add(Box.createVerticalGlue());
 		connectPanel.add(connectPanelA);
 		connectPanel.add(connectPanelB);
-		//connectPanel.add(Box.createVerticalGlue());
+		serverField.setMaximumSize(new Dimension(serverList.getPreferredSize().width, serverField.getMinimumSize().height));
+		serverList.setMaximumSize(new Dimension(serverField.getSize().width, serverField.getMinimumSize().height));
+		connectPanelA.setPreferredSize(new Dimension(1000,50));
+		connectPanelB.setPreferredSize(new Dimension(1000,50));
+		//connectPanel.add(Box.createVerticalStrut(300));
+		
 		connectButtonA.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent e) {

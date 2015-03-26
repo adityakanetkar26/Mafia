@@ -60,7 +60,7 @@ public class ServerEngine extends Engine{
 	private void playerJoin(Message message){
 		if(!playerConnections.containsValue(message.source)){
 			playerCounter++;
-			Player newPlayer = new Player(Integer.toString(playerCounter));
+			Player newPlayer = new Player(playerCounter, Integer.toString(playerCounter));
 			state.addPlayer(newPlayer);
 			playerConnections.put(newPlayer, message.source);
 			message.source.sendMessage("player join$"+ newPlayer.id);

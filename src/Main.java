@@ -13,6 +13,7 @@ public class Main {
 		ClientEngine engine = new ClientEngine();
 		engine.start();
 		engine.showDisplay();
+		engine.displayDebugs = true;
 
 	}
 

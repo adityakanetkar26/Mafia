@@ -25,7 +25,7 @@ public class Engine extends Thread{
 			try {
 				Message message = messages.take();
 				if(display != null && displayDebugs){
-					display.appendMessage("DEBUG: " + message);
+					display.appendMessage("DEBUG: " + message.message + "\n");
 				}
 				if(message.message.equals("stop")){
 					stop = true;
