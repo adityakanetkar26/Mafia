@@ -187,8 +187,8 @@ public class DisplayPanel extends JPanel{
 	}
 	
 	private void loadImages(){
-		mafPics = new BufferedImage[2];
-		civPics = new BufferedImage[3];
+		mafPics = new BufferedImage[4];
+		civPics = new BufferedImage[7];
 		unkPics = new BufferedImage[1];
 		try {
 			//unknown = ImageIO.read(new File("/img/unknown.png"));
