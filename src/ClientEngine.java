@@ -12,6 +12,11 @@ public class ClientEngine extends Engine{
 		
 		case "start server":
 			ServerEngine.startServer();
+			try {
+				messages.put(new Message("connect to server$127.0.0.1$40000",null));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			break;
 			
 		case "connect to server":
