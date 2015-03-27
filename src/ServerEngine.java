@@ -12,6 +12,7 @@ public class ServerEngine extends Engine{
 	public static void startServer(){
 		if(serverEngine == null){
 			serverEngine = new ServerEngine();
+			serverEngine.state.gamePhase = "awaiting players";
 			serverEngine.start();
 		}		
 	}
@@ -61,11 +62,16 @@ public class ServerEngine extends Engine{
 			state.addPlayer(newPlayer);
 			playerConnections.put(newPlayer, message.source);
 			message.source.sendMessage("player join$"+ newPlayer.id);
-			state.assignPlayer(newPlayer);
+			//state.assignPlayer(newPlayer);
+			
+			if(state.players.size() > 4){
+				state.assignIdentities();
+			}
 			
 			for(Player player : state.players.values()){
 				propagatePlayerUpdate(Integer.toString(player.id), state.getPlayerState(player));
 			}
+			propagateGameUpdate(state.getGameState());
 			
 		}
 	}

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -9,27 +10,32 @@ public class GameState {
 	
 	Player self;
 	
+	String gamePhase = "not in game";
+	
 	public void addPlayer(Player player){
 		players.put(player.id, player);
 	}
 	
 	public void assignIdentities(){
+		gamePhase = "night";
 		int totalSize = players.size();
 		badPlayerCount = (int)Math.sqrt((double)totalSize);
 		goodPlayerCount = totalSize - badPlayerCount;
 
+		ArrayList<Player> unassignedPeople = new ArrayList<Player>();
+		for(Player player : players.values()){
+			player.role = "good";
+			unassignedPeople.add(player);
+		}
+		
 		Random randomGenerator = new Random();
 		
 		int remainingAssign = badPlayerCount;
 		while(remainingAssign != 0){
-			int randomInt = randomGenerator.nextInt(badPlayerCount);
-			Player p = players.get(randomInt);
-
-			if(p.role.equals("unassigned")){
-	
-				assignPlayer(p);
-				remainingAssign--;
-			}
+			int randomInt = randomGenerator.nextInt(unassignedPeople.size());
+			Player p = unassignedPeople.remove(randomInt);
+			p.role = "bad";
+			remainingAssign--;
 		}
 		
 	}
@@ -65,11 +71,11 @@ public class GameState {
 	}
 	
 	public void stateUpdateServer(String update){
-		
+		gamePhase = update;
 	}
 	
 	public void stateUpdateClient(String update){
-		
+		gamePhase = update;
 	}
 	
 	public String getPlayerState(Player player){
@@ -77,14 +83,13 @@ public class GameState {
 	}
 	
 	public String getGameState(){
-		if(badPlayerCount == 0)
-			return "Good Guys Win";
-		else if(goodPlayerCount == 0)
-			return "Bad Guys Win";
-
-		return "Game Still On! Good Luck!";
+//		if(badPlayerCount == 0)
+//			return "Good Guys Win";
+//		else if(goodPlayerCount == 0)
+//			return "Bad Guys Win";
+//
+//		return "Game Still On! Good Luck!";
+		return gamePhase;
 	}
 
-	public void updateGameState(){
-	}
 }

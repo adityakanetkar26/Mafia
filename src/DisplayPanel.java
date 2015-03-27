@@ -33,6 +33,7 @@ public class DisplayPanel extends JPanel{
 	BufferedImage[] mafPics;
 	BufferedImage[] unkPics;
 	HashMap<Player, BufferedImage> playerPics = new HashMap<Player, BufferedImage>();
+	HashMap<Player, String> playerViews = new HashMap<Player, String>();
 	
 	public DisplayPanel(GameState s, LinkedBlockingQueue<Message> msgs){
 		state = s;
@@ -154,7 +155,8 @@ public class DisplayPanel extends JPanel{
 		int y;
 		int radius = Math.min(this.getWidth(), this.getHeight())*1/3;
 		for(Player player : state.players.values()){
-			if(!playerPics.containsKey(player)){
+			if(!playerViews.containsKey(player) || !(playerViews.get(player).equals(player.role))){
+				playerViews.put(player, player.role);
 				Random rand = new Random();
 				if(player.role.equals("good")){
 					playerPics.put(player, civPics[rand.nextInt(civPics.length)]);
