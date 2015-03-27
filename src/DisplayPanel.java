@@ -156,11 +156,14 @@ public class DisplayPanel extends JPanel{
 		for(Player player : state.players.values()){
 			if(!playerPics.containsKey(player)){
 				Random rand = new Random();
-				if(player.goodBad){
+				if(player.role.equals("good")){
 					playerPics.put(player, civPics[rand.nextInt(civPics.length)]);
 				}
-				else if(!player.goodBad){
+				else if(player.role.equals("bad")){
 					playerPics.put(player, mafPics[rand.nextInt(mafPics.length)]);
+				}
+				else if(player.role.equals("unassigned")){
+					playerPics.put(player, unkPics[rand.nextInt(unkPics.length)]);
 				}
 			}
 			if(player == state.self){

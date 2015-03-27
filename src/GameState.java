@@ -24,9 +24,8 @@ public class GameState {
 		while(remainingAssign != 0){
 			int randomInt = randomGenerator.nextInt(badPlayerCount);
 			Player p = players.get(randomInt);
-			boolean playerType = p.isGoodOrBad();
 
-			if(playerType == true){
+			if(p.role.equals("unassigned")){
 	
 				assignPlayer(p);
 				remainingAssign--;
@@ -35,7 +34,7 @@ public class GameState {
 		
 	}
 	public void assignPlayer(Player player){
-		player.setBad();
+		//player.setBad();
 	}
 	
 	public void playerUpdateClient(String id, String update){

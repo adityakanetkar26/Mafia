@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Player {
 	
 	int id;
-	boolean goodBad; //Good Player: True, Bad Player: False
+	String role; //good, bad, Unassigned
 	boolean aliveDead; //Alive Player: True, Dead Player: False
 	String name;
 	ArrayList<Player> visiblePlayers;
@@ -11,7 +11,8 @@ public class Player {
 	public Player(int identifier, String Name){
 		id = identifier;
 		name = Name;
-		goodBad = true;		//Assigning a player as good by default
+		aliveDead = true;
+		role = "unassigned";
 	}
 
 	public String Vote(){
@@ -29,11 +30,11 @@ public class Player {
 		aliveDead = newState;
 	}
 	
-	public boolean isGoodOrBad(){
-		return goodBad;
+	public String getRole(){
+		return role;
 	}
 		
-	public void setBad(){
-		goodBad = false;
+	public void setRole(String r){
+		role = r;
 	}
 }
