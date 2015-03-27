@@ -28,7 +28,7 @@ public class ServerEngine extends Engine{
 			break;
 			
 		case "player update":
-			state.playerUpdateServer(tokens[1], tokens[2]);
+			state.playerUpdate(tokens[1], tokens[2]);
 			propagatePlayerUpdate(tokens[1], tokens[2]);
 			break;
 			
@@ -64,7 +64,7 @@ public class ServerEngine extends Engine{
 			state.assignPlayer(newPlayer);
 			
 			for(Player player : state.players.values()){
-				propagatePlayerUpdate(Integer.toString(playerCounter), "new");
+				propagatePlayerUpdate(Integer.toString(player.id), state.getPlayerState(player));
 			}
 			
 		}

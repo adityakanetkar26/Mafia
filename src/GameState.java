@@ -37,12 +37,31 @@ public class GameState {
 		//player.setBad();
 	}
 	
-	public void playerUpdateClient(String id, String update){
-		
-	}
-	
-	public void playerUpdateServer(String id, String update){
-		
+	public void playerUpdate(String i, String update){
+		int id = Integer.parseInt(i);
+		if(!players.containsKey(id)){
+			players.put(id, new Player(id, i));
+		}
+		Player player = players.get(id);
+		String[] updates = update.split("#");
+		for(int a = 0; a < updates.length; a = a + 2){
+			String field = updates[a];
+			String value = updates[a+1];
+			
+			switch(field){
+			case "role":
+				player.role = value;
+				break;
+			case "alive":
+				player.aliveDead = (value.equals("alive"));
+				break;
+			case "vote":
+				
+				break;
+			default:
+				System.out.println("weird update..");
+			}
+		}
 	}
 	
 	public void stateUpdateServer(String update){
@@ -54,11 +73,7 @@ public class GameState {
 	}
 	
 	public String getPlayerState(Player player){
-		return getPlayerState(player, player);
-	}
-	
-	public String getPlayerState(Player player, Player observer){
-		return "dsadfsadf";
+		return "role#" + player.role + "#alive#" + (player.aliveDead ? "alive" : "dead");
 	}
 	
 	public String getGameState(){

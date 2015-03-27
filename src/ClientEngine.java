@@ -26,7 +26,7 @@ public class ClientEngine extends Engine{
 			break;
 			
 		case "player update":
-			state.playerUpdateClient(tokens[1], tokens[2]);
+			state.playerUpdate(tokens[1], tokens[2]);
 			if(message.source != serverConnection){
 				serverConnection.sendMessage("player update$" + tokens[1] + "$" + tokens[2]);
 			}
