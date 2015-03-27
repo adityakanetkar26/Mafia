@@ -29,12 +29,12 @@ public class ServerEngine extends Engine{
 			
 		case "player update":
 			state.playerUpdateServer(tokens[1], tokens[2]);
-			propagatePlayerUpdate(state.players.get(tokens[1]));
+			propagatePlayerUpdate(tokens[1], tokens[2]);
 			break;
 			
 		case "game update":
 			state.stateUpdateServer(tokens[1]);
-			propagateGameUpdate();
+			propagateGameUpdate(tokens[1]);
 			break;
 			
 		default: 
@@ -42,18 +42,15 @@ public class ServerEngine extends Engine{
 		}//end switch
 	}
 	
-	private void propagatePlayerUpdate(Player player){
-		for(Player observer : playerConnections.keySet()){
-			playerConnections.get(observer).sendMessage("player update$" + player.id + "$" + state.getPlayerState(player, observer));
+	private void propagatePlayerUpdate(String id, String update){
+		for(NetConnection net : playerConnections.values()){
+			net.sendMessage("player update$" + id + "$" + update);
 		}
 	}
 	
-	private void propagateGameUpdate(){
+	private void propagateGameUpdate(String update){
 		for(NetConnection net : playerConnections.values()){
-			net.sendMessage("game update$" + state.getGameState());
-		}
-		for(Player player : state.players.values()){
-			propagatePlayerUpdate(player);
+			net.sendMessage("game update$" + update);
 		}
 	}
 	
@@ -67,7 +64,7 @@ public class ServerEngine extends Engine{
 			state.assignPlayer(newPlayer);
 			
 			for(Player player : state.players.values()){
-				propagatePlayerUpdate(player);
+				propagatePlayerUpdate(Integer.toString(playerCounter), "new");
 			}
 			
 		}

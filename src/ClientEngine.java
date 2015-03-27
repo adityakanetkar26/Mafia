@@ -26,12 +26,9 @@ public class ClientEngine extends Engine{
 			break;
 			
 		case "player update":
-			if(!state.players.keySet().contains(Integer.parseInt(tokens[1]))){
-				state.addPlayer(new Player(Integer.parseInt(tokens[1]), tokens[1]));
-			}
 			state.playerUpdateClient(tokens[1], tokens[2]);
 			if(message.source != serverConnection){
-				serverConnection.sendMessage("player update$" + state.self.id + "$" + state.getPlayerState(state.self));
+				serverConnection.sendMessage("player update$" + tokens[1] + "$" + tokens[2]);
 			}
 			break;
 			
