@@ -75,6 +75,13 @@ public class Display extends JFrame{
 	}
 	
 	public void updateDisplay(){
+		while(!state.chatMessages.isEmpty()){
+			try {
+				textArea.append(state.chatMessages.dequeue());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		displayPanel.updateDisplay();
 		repaint();
 //		textArea.setText("");

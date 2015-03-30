@@ -66,6 +66,7 @@ public class ServerEngine extends Engine{
 			
 			if(state.players.size() > 4){
 				state.assignIdentities();
+				messages.add(new Message("game update$night", null));
 			}
 			
 			for(Player player : state.players.values()){

@@ -5,6 +5,7 @@ public class Player {
 	int id;
 	String role; //good, bad, Unassigned
 	boolean aliveDead; //Alive Player: True, Dead Player: False
+	String votingAgainst;
 	String name;
 	ArrayList<Player> visiblePlayers;
 		
@@ -17,9 +18,8 @@ public class Player {
 
 	public String getVote(){
 		//Create GUI to ask the player to vote against another player. 
-		//Get that vote and send to the server
-		String vote = "xyz"; 
-		return vote;
+		//Get that vote and send to the server 
+		return votingAgainst;
 	}
 	
 	public boolean isAliveOrDead(){

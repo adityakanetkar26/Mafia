@@ -3,9 +3,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import sun.misc.Queue;
+
 public class GameState {
 
 	HashMap<Integer, Player> players = new HashMap<Integer, Player>();
+	Queue<String> chatMessages = new Queue<String>();
+	
 	int badPlayerCount;
 	int goodPlayerCount;
 	
@@ -18,7 +22,6 @@ public class GameState {
 	}
 	
 	public void assignIdentities(){
-		gamePhase = "night";
 		int totalSize = players.size();
 		badPlayerCount = (int)Math.sqrt((double)totalSize);
 		goodPlayerCount = totalSize - badPlayerCount;
@@ -60,7 +63,10 @@ public class GameState {
 				player.aliveDead = (value.equals("alive"));
 				break;
 			case "vote":
-				
+				player.votingAgainst = value;
+				break;
+			case "chat":
+				chatMessages.enqueue(value);
 				break;
 			default:
 				System.out.println("weird update..");
@@ -70,6 +76,17 @@ public class GameState {
 	
 	public void stateUpdateServer(String update){
 		gamePhase = update;
+		if(gamePhase.equals("night")){
+			//start a timer
+			//allow bad chat
+		}
+		else if(gamePhase.equals("day")){
+			//check end condition
+			//start a timer
+			//allow voting
+			//allow chat
+		}
+		
 	}
 	
 	public void stateUpdateClient(String update){
