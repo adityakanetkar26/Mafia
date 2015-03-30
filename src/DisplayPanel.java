@@ -27,7 +27,9 @@ public class DisplayPanel extends JPanel{
 	LinkedBlockingQueue<Message> messages;
 	GameState state;
 	JPanel connectPanel;
-	String displayState = "main menu";
+	JButton startButton;
+	JLabel waitLabel;
+	String displayState = "not in game";
 	
 	BufferedImage[] civPics;
 	BufferedImage[] mafPics;
@@ -54,18 +56,25 @@ public class DisplayPanel extends JPanel{
 		JButton connectButtonA = new JButton("Connect");
 		JTextField serverField = new JTextField("...or enter IP adress here.");
 		JButton connectButtonB = new JButton("Connect");
+		startButton = new JButton("Start Game...");
+		waitLabel = new JLabel("Waiting for game start...");
 		connectButtonA.setForeground(new Color(250,125,0));
 		connectButtonB.setForeground(new Color(250,125,0));
+		startButton.setForeground(new Color(250,125,0));
 		serverField.setForeground(new Color(250,125,0));
 		serverList.setForeground(new Color(250,125,0));
+		waitLabel.setForeground(new Color(250,125,0));
 		connectButtonA.setBackground(new Color(0,40,80));
 		connectButtonB.setBackground(new Color(0,40,80));
+		startButton.setBackground(new Color(0,40,80));
 		serverField.setBackground(new Color(0,40,80));
 		serverList.setBackground(new Color(0,40,80));
 		connectButtonA.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		connectButtonB.setFont(new Font("Cooper Black", Font.PLAIN, 14));
+		startButton.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		serverField.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		serverList.setFont(new Font("Cooper Black", Font.PLAIN, 14));
+		waitLabel.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 
 		connectButtonA.addActionListener(new ActionListener(){
 
@@ -89,6 +98,20 @@ public class DisplayPanel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				try {
 					messages.put(new Message("connect to server$" + serverField.getText() + "$" + 40000, null));
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		});
+		
+		startButton.addActionListener(new ActionListener(){
+
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if(ServerEngine.serverEngine != null){
+						ServerEngine.serverEngine.messages.put(new Message("start game", null));
+					}
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
@@ -142,8 +165,13 @@ public class DisplayPanel extends JPanel{
 		c.weightx = 0.3;
 		connectPanel.add(new JLabel(), c);
 		
-		this.setLayout(new GridLayout(0,1));
-		this.add(connectPanel);
+		this.setLayout(new GridBagLayout());
+		c.gridx = 1;
+		c.gridy = 1;
+		c.weightx = 0.1;
+		c.weighty = 0.1;
+		c.fill = GridBagConstraints.BOTH;
+		this.add(connectPanel,c);
 		
 	}//end constructor
 	
@@ -185,9 +213,25 @@ public class DisplayPanel extends JPanel{
 	}//end repaint
 	
 	public void updateDisplay(){
-		if(state.players.values().size()>0 && displayState.equals("main menu")){
+		if(!state.gamePhase.equals("not in game") && displayState.equals("not in game")){
 			this.remove(connectPanel);
-			displayState = "playing";
+			displayState = "awaiting players";
+			if(ServerEngine.serverEngine!=null){
+				this.add(startButton);
+			}
+			else{
+				this.add(waitLabel);
+			}
+			this.revalidate();
+			
+		}
+		else if(!state.gamePhase.equals("awaiting players") && displayState.equals("awaiting players")){
+			if(ServerEngine.serverEngine!=null){
+				this.remove(startButton);
+			}
+			else{
+				this.remove(waitLabel);
+			}
 		}
 	}
 	

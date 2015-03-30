@@ -2,7 +2,6 @@
 public class ClientEngine extends Engine{
 
 	NetConnection serverConnection;
-	boolean hosting = false;
 	
 	protected void performAction(Message message){
 		System.out.println("client processing message " + message.message);
@@ -13,7 +12,6 @@ public class ClientEngine extends Engine{
 		
 		case "start server":
 			ServerEngine.startServer();
-			hosting = true;
 			try {
 				messages.put(new Message("connect to server$127.0.0.1$40000",null));
 			} catch (InterruptedException e) {

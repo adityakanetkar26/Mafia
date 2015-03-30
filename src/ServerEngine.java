@@ -40,6 +40,14 @@ public class ServerEngine extends Engine{
 			propagateGameUpdate(tokens[1]);
 			break;
 			
+		case "start game":
+			state.assignIdentities();
+			for(Player player : state.players.values()){
+				propagatePlayerUpdate(Integer.toString(player.id), state.getPlayerState(player));
+			}
+			messages.add(new Message("game update$night", null));
+			break;
+			
 		default: 
 			System.out.println("What the hell even is this");	
 		}//end switch
@@ -64,12 +72,6 @@ public class ServerEngine extends Engine{
 			state.addPlayer(newPlayer);
 			playerConnections.put(newPlayer, message.source);
 			message.source.sendMessage("player join$"+ newPlayer.id);
-			//state.assignPlayer(newPlayer);
-			
-			if(state.players.size() > 1){
-				state.assignIdentities();
-				messages.add(new Message("game update$night", null));
-			}
 			
 			for(Player player : state.players.values()){
 				propagatePlayerUpdate(Integer.toString(player.id), state.getPlayerState(player));
