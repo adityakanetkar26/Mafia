@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class GameState {
@@ -38,9 +39,6 @@ public class GameState {
 			remainingAssign--;
 		}
 		
-	}
-	public void assignPlayer(Player player){
-		//player.setBad();
 	}
 	
 	public void playerUpdate(String i, String update){
@@ -83,13 +81,33 @@ public class GameState {
 	}
 	
 	public String getGameState(){
-//		if(badPlayerCount == 0)
-//			return "Good Guys Win";
-//		else if(goodPlayerCount == 0)
-//			return "Bad Guys Win";
-//
-//		return "Game Still On! Good Luck!";
 		return gamePhase;
 	}
+	
+	public void collectAndProcessVotes(){
+		Integer[] votes = {0};
+		int i = 0;
+		for(Player player : players.values()){
+			String vote = player.getVote();
+			votes[i] = Integer.parseInt(vote);
+			i++;
+		}
+		
+		Map<Integer, Integer> voteFreq = new HashMap<Integer, Integer>();
+		for(i = 0; i < votes.length; i++){
+			voteFreq.put(votes[i], voteFreq.get(votes[i]) + 1);			
+		}
+		
+		int max = 0;
+		for(Map.Entry<Integer, Integer> voteF : voteFreq.entrySet() ){
+			if(voteF.getValue() >= max){
+				max = voteF.getKey();
+			}
+		}
+		
+		Player deadPlayer = players.get(max);
+		deadPlayer.updateRole(false);
+	}
+	
 
 }

@@ -15,7 +15,7 @@ public class Player {
 		role = "unassigned";
 	}
 
-	public String Vote(){
+	public String getVote(){
 		//Create GUI to ask the player to vote against another player. 
 		//Get that vote and send to the server
 		String vote = "xyz"; 
@@ -37,4 +37,12 @@ public class Player {
 	public void setRole(String r){
 		role = r;
 	}
+	
+	public void badPlayerChat(){
+		
+	}
+	public void allPlayerChat(){
+		
+	}
+	
 }
