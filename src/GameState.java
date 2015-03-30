@@ -86,12 +86,30 @@ public class GameState {
 			//allow bad chat
 		}
 		else if(gamePhase.equals("day")){
-			//check end condition
-			startTimer("night", 120);
-			//allow voting
-			//allow chat
+			boolean overOrNot = checkEnd();
+			
+			if(!overOrNot){
+				startTimer("night", 120);
+				//allow voting
+				//allow chat	
+			}
+			else
+				try {
+					messages.put(new Message("game update$over",null));
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 		}
-		
+		else if(gamePhase.equals("over")){
+			//Display the result
+		}
+	}
+	
+	private boolean checkEnd(){
+		if(goodPlayerCount == 0 || badPlayerCount == 0)
+			return true;
+		else
+			return false;
 	}
 	
 	private void startTimer(String update, int seconds){
@@ -145,6 +163,13 @@ public class GameState {
 		
 		Player deadPlayer = players.get(max);
 		deadPlayer.updateRole(false);
+		
+		//Update Good Player or Bad Player Count
+		if(deadPlayer.getRole().equals("good")){
+			goodPlayerCount--;
+		} else if(deadPlayer.getRole().equals("bad")){
+			badPlayerCount--;
+		}
 	}
 	
 

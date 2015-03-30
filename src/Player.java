@@ -17,8 +17,6 @@ public class Player {
 	}
 
 	public String getVote(){
-		//Create GUI to ask the player to vote against another player. 
-		//Get that vote and send to the server 
 		return votingAgainst;
 	}
 	
