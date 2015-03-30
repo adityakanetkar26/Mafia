@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.concurrent.LinkedBlockingQueue;
 
 
 public class ServerEngine extends Engine{
@@ -12,6 +13,7 @@ public class ServerEngine extends Engine{
 	public static void startServer(){
 		if(serverEngine == null){
 			serverEngine = new ServerEngine();
+			serverEngine.state.messages = serverEngine.messages;
 			serverEngine.state.gamePhase = "awaiting players";
 			serverEngine.start();
 		}		
@@ -64,7 +66,7 @@ public class ServerEngine extends Engine{
 			message.source.sendMessage("player join$"+ newPlayer.id);
 			//state.assignPlayer(newPlayer);
 			
-			if(state.players.size() > 4){
+			if(state.players.size() > 1){
 				state.assignIdentities();
 				messages.add(new Message("game update$night", null));
 			}

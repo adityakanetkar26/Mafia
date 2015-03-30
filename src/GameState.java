@@ -2,12 +2,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import sun.misc.Queue;
 
 public class GameState {
 
 	HashMap<Integer, Player> players = new HashMap<Integer, Player>();
+	LinkedBlockingQueue<Message> messages;
 	Queue<String> chatMessages = new Queue<String>();
 	
 	int badPlayerCount;
@@ -66,6 +70,7 @@ public class GameState {
 				player.votingAgainst = value;
 				break;
 			case "chat":
+				//check if player is supposed to see the message
 				chatMessages.enqueue(value);
 				break;
 			default:
@@ -77,15 +82,31 @@ public class GameState {
 	public void stateUpdateServer(String update){
 		gamePhase = update;
 		if(gamePhase.equals("night")){
-			//start a timer
+			startTimer("day", 30);
 			//allow bad chat
 		}
 		else if(gamePhase.equals("day")){
 			//check end condition
-			//start a timer
+			startTimer("night", 120);
 			//allow voting
 			//allow chat
 		}
+		
+	}
+	
+	private void startTimer(String update, int seconds){
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask(){
+			public void run() {
+				try {
+					messages.put(new Message("game update$"+update,null));
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		}, 1000*seconds);
+		
 		
 	}
 	
