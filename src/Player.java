@@ -38,11 +38,5 @@ public class Player {
 		role = r;
 	}
 	
-	public void badPlayerChat(){
-		
-	}
-	public void allPlayerChat(){
-		
-	}
 	
 }
