@@ -77,7 +77,7 @@ public class Display extends JFrame{
 	public void updateDisplay(){
 		while(!state.chatMessages.isEmpty()){
 			try {
-				textArea.append(state.chatMessages.dequeue());
+				textArea.append(state.chatMessages.dequeue() + "\n");
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

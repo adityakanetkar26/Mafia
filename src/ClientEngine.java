@@ -2,6 +2,7 @@
 public class ClientEngine extends Engine{
 
 	NetConnection serverConnection;
+	boolean hosting = false;
 	
 	protected void performAction(Message message){
 		System.out.println("client processing message " + message.message);
@@ -12,6 +13,7 @@ public class ClientEngine extends Engine{
 		
 		case "start server":
 			ServerEngine.startServer();
+			hosting = true;
 			try {
 				messages.put(new Message("connect to server$127.0.0.1$40000",null));
 			} catch (InterruptedException e) {
@@ -31,9 +33,11 @@ public class ClientEngine extends Engine{
 			break;
 			
 		case "player update":
-			state.playerUpdate(tokens[1], tokens[2]);
 			if(message.source != serverConnection){
 				serverConnection.sendMessage("player update$" + tokens[1] + "$" + tokens[2]);
+			}
+			else{
+				state.playerUpdate(tokens[1], tokens[2]);
 			}
 			break;
 			
