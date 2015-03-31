@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -29,13 +31,14 @@ public class DisplayPanel extends JPanel{
 	JPanel connectPanel;
 	JButton startButton;
 	JLabel waitLabel;
+	JLabel gameLabel;
 	String displayState = "not in game";
 	
 	BufferedImage[] civPics;
 	BufferedImage[] mafPics;
 	BufferedImage[] unkPics;
-	HashMap<Player, BufferedImage> playerPics = new HashMap<Player, BufferedImage>();
-	HashMap<Player, String> playerViews = new HashMap<Player, String>();
+	
+	HashMap<Player, PlayerView> playerViews = new HashMap<Player, PlayerView>();
 	
 	public DisplayPanel(GameState s, LinkedBlockingQueue<Message> msgs){
 		state = s;
@@ -58,12 +61,14 @@ public class DisplayPanel extends JPanel{
 		JButton connectButtonB = new JButton("Connect");
 		startButton = new JButton("Start Game...");
 		waitLabel = new JLabel("Waiting for game start...");
+		gameLabel = new JLabel("");
 		connectButtonA.setForeground(new Color(250,125,0));
 		connectButtonB.setForeground(new Color(250,125,0));
 		startButton.setForeground(new Color(250,125,0));
 		serverField.setForeground(new Color(250,125,0));
 		serverList.setForeground(new Color(250,125,0));
 		waitLabel.setForeground(new Color(250,125,0));
+		gameLabel.setForeground(new Color(250,125,0));
 		connectButtonA.setBackground(new Color(0,40,80));
 		connectButtonB.setBackground(new Color(0,40,80));
 		startButton.setBackground(new Color(0,40,80));
@@ -75,6 +80,7 @@ public class DisplayPanel extends JPanel{
 		serverField.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		serverList.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		waitLabel.setFont(new Font("Cooper Black", Font.PLAIN, 14));
+		gameLabel.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 
 		connectButtonA.addActionListener(new ActionListener(){
 
@@ -117,6 +123,35 @@ public class DisplayPanel extends JPanel{
 				}
 			}
 
+		});
+		
+		this.addMouseListener(new MouseListener(){
+
+			public void mouseClicked(MouseEvent arg0) {
+				
+			}
+
+			public void mouseEntered(MouseEvent arg0) {
+				
+			}
+
+			public void mouseExited(MouseEvent arg0) {
+				
+			}
+
+			public void mousePressed(MouseEvent arg0) {
+				
+			}
+
+			public void mouseReleased(MouseEvent arg0) {
+				for(Player player : playerViews.keySet()){
+					PlayerView playerView = playerViews.get(player);
+					if(player != state.self && arg0.getX() > playerView.x && arg0.getX() < playerView.rx&& arg0.getY() > playerView.y && arg0.getY() < playerView.ry){
+						messages.add(new Message("player update$" + state.self.id + "$vote#" + player.id,null));
+					}
+				}
+			}
+			
 		});
 		
 		ImageIcon icon = new ImageIcon(mafPics[0]);
@@ -179,34 +214,74 @@ public class DisplayPanel extends JPanel{
 		super.paintComponent(g);
 		int numPlayers = state.players.values().size();
 		int count = 1;
-		int x;
-		int y;
-		int radius = Math.min(this.getWidth(), this.getHeight())*1/3;
+		double factor = 0.33;
+
 		for(Player player : state.players.values()){
-			if(!playerViews.containsKey(player) || !(playerViews.get(player).equals(player.role))){
-				playerViews.put(player, player.role);
-				Random rand = new Random();
-				if(player.role.equals("good")){
-					playerPics.put(player, civPics[rand.nextInt(civPics.length)]);
-				}
-				else if(player.role.equals("bad")){
-					playerPics.put(player, mafPics[rand.nextInt(mafPics.length)]);
-				}
-				else if(player.role.equals("unassigned")){
-					playerPics.put(player, unkPics[rand.nextInt(unkPics.length)]);
-				}
+			if(!playerViews.containsKey(player)){
+				playerViews.put(player, new PlayerView());
 			}
-			if(player == state.self){
-				x = this.getWidth()/2;
-				y = this.getHeight()/3 + radius;
+			String visibleRole;
+			PlayerView playerView = playerViews.get(player);
+			if(player == state.self || state.self.role.equals("bad") || !player.aliveDead){
+				visibleRole = player.role;
 			}
 			else{
-				x = (int) (this.getWidth()/2 + Math.cos(Math.PI*2*count/numPlayers - Math.PI/2)*radius);
-				y = (int) (this.getHeight()/3 - Math.sin(Math.PI*2*count/numPlayers - Math.PI/2)*radius);
+				visibleRole = "unassigned";
+			}
+			if(!visibleRole.equals(playerView.visibleRole)){
+				System.out.println(visibleRole + " " + playerView.visibleRole);
+				playerView.visibleRole = visibleRole;
+				Random rand = new Random();
+				if(visibleRole.equals("good")){
+					playerView.pic = civPics[rand.nextInt(civPics.length)];
+				}
+				else if(visibleRole.equals("bad")){
+					playerView.pic = mafPics[rand.nextInt(mafPics.length)];
+				}
+				else if(visibleRole.equals("unassigned")){
+					playerView.pic = unkPics[rand.nextInt(unkPics.length)];
+				}
+			}
+			if(player.votingAgainst!=null){
+				playerView.visibleVote = state.players.get(Integer.parseInt(player.votingAgainst));
+			}
+			
+			BufferedImage img = playerView.pic;
+			double pyy = Math.min(this.getHeight()*factor, img.getHeight()); 
+			double pxx = Math.min(this.getWidth()*factor, img.getWidth()); 
+			double py = Math.min(pyy, 1.0*(pxx)*img.getHeight()/(img.getWidth()));
+			double px = Math.min(pxx, 1.0*(pyy)*img.getWidth()/(img.getHeight())); 
+			
+			double ry = (this.getHeight()-py-40)/2;
+			double rx = (this.getWidth()-px-40)/2;
+			
+			if(player == state.self){
+				playerView.x = (int) (rx) + 20;
+				playerView.y = (int) (ry + ry) + 20;
+			}
+			else{
+				playerView.x = (int) (rx + 20 + Math.cos(Math.PI*2*count/numPlayers - Math.PI/2)*rx);
+				playerView.y = (int) (ry + 20 + - Math.sin(Math.PI*2*count/numPlayers - Math.PI/2)*ry);
 				count++;
 			}
-			BufferedImage img = playerPics.get(player);
-			g.drawImage(img,x,y, Math.min(radius*img.getWidth()/img.getHeight(), img.getWidth()), Math.min(radius, img.getHeight()), null);
+			playerView.rx = (int) (playerView.x + px);
+			playerView.ry = (int) (playerView.y + py);
+			g.drawImage(img,playerView.x,playerView.y, (int)px, (int)py, null);
+			
+		}
+		for(Player player : state.players.values()){
+			PlayerView playerView = playerViews.get(player);
+			g.setColor(new Color(150,0,0));
+			if(playerView.visibleVote != null){
+				PlayerView target = playerViews.get(playerView.visibleVote);
+				g.drawLine(playerView.x, playerView.y, target.x, target.y);
+				double dist = Math.sqrt((playerView.x - target.x)*(playerView.x - target.x) + (playerView.y - target.y)*(playerView.y - target.y));
+				g.drawLine(target.x, target.y, (int)(target.x + 10.0*(playerView.x - target.x)/dist-5.0*(playerView.y - target.y)/dist), (int)(target.y + 10.0*(playerView.y - target.y)/dist+5.0*(playerView.x - target.x)/dist));
+				g.drawLine(target.x, target.y, (int)(target.x + 10.0*(playerView.x - target.x)/dist+5.0*(playerView.y - target.y)/dist), (int)(target.y + 10.0*(playerView.y - target.y)/dist-5.0*(playerView.x - target.x)/dist));
+			}
+			g.setColor(new Color(250,125,0));
+			g.setFont(new Font("Cooper Black", Font.PLAIN, 18));
+			g.drawString((player == state.self ? "YOU - " : "") + player.name + (playerView.visibleRole.equals("unassigned") ? "" : ", " + player.role), playerView.x, playerView.y-5);
 			
 		}
 		
@@ -254,6 +329,18 @@ public class DisplayPanel extends JPanel{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private class PlayerView{
+		
+		BufferedImage pic;
+		String visibleRole;
+		int x;
+		int y;
+		int rx;
+		int ry;
+		Player visibleVote;
+		
 	}
 
 }
