@@ -27,7 +27,7 @@ public class ServerEngine extends Engine{
 		switch(tokens[0]){
 		
 		case "player join":
-			playerJoin(message);
+			playerJoin(message, tokens[1]);
 			break;
 			
 		case "player update":
@@ -69,13 +69,13 @@ public class ServerEngine extends Engine{
 		}
 	}
 	
-	private void playerJoin(Message message){
+	private void playerJoin(Message message, String name){
 		if(!playerConnections.containsValue(message.source)){
 			playerCounter++;
-			Player newPlayer = new Player(playerCounter, Integer.toString(playerCounter));
+			Player newPlayer = new Player(playerCounter, name);
 			state.addPlayer(newPlayer);
 			playerConnections.put(newPlayer, message.source);
-			message.source.sendMessage("player join$"+ newPlayer.id);
+			message.source.sendMessage("player join$"+ newPlayer.id + "$" + name);
 			
 			for(Player player : state.players.values()){
 				propagatePlayerUpdate(Integer.toString(player.id), state.getPlayerState(player));

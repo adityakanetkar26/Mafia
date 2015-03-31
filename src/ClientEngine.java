@@ -13,7 +13,7 @@ public class ClientEngine extends Engine{
 		case "start server":
 			ServerEngine.startServer();
 			try {
-				messages.put(new Message("connect to server$127.0.0.1$40000",null));
+				messages.put(new Message("connect to server$127.0.0.1$40000$" + tokens[1],null));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -21,11 +21,11 @@ public class ClientEngine extends Engine{
 			
 		case "connect to server":
 			serverConnection = new NetConnection(tokens[1], Integer.parseInt(tokens[2]), messages);
-			serverConnection.sendMessage("player join");
+			serverConnection.sendMessage("player join$"+tokens[3]);
 			break;
 		
 		case "player join":
-			Player player = new Player(Integer.parseInt(tokens[1]), tokens[1]);
+			Player player = new Player(Integer.parseInt(tokens[1]), tokens[2]);
 			state.self = player;
 			state.addPlayer(player);
 			break;

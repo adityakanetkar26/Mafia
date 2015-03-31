@@ -58,6 +58,7 @@ public class DisplayPanel extends JPanel{
 		JComboBox serverList = new JComboBox(new String[]{"Choose a server...", "Host server", "Vlad's Resnet"});
 		JButton connectButtonA = new JButton("Connect");
 		JTextField serverField = new JTextField("...or enter IP adress here.");
+		JTextField nameField = new JTextField("Player name");
 		JButton connectButtonB = new JButton("Connect");
 		startButton = new JButton("Start Game...");
 		waitLabel = new JLabel("Waiting for game start...");
@@ -66,6 +67,7 @@ public class DisplayPanel extends JPanel{
 		connectButtonB.setForeground(new Color(250,125,0));
 		startButton.setForeground(new Color(250,125,0));
 		serverField.setForeground(new Color(250,125,0));
+		nameField.setForeground(new Color(250,125,0));
 		serverList.setForeground(new Color(250,125,0));
 		waitLabel.setForeground(new Color(250,125,0));
 		gameLabel.setForeground(new Color(250,125,0));
@@ -73,11 +75,13 @@ public class DisplayPanel extends JPanel{
 		connectButtonB.setBackground(new Color(0,40,80));
 		startButton.setBackground(new Color(0,40,80));
 		serverField.setBackground(new Color(0,40,80));
+		nameField.setBackground(new Color(0,40,80));
 		serverList.setBackground(new Color(0,40,80));
 		connectButtonA.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		connectButtonB.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		startButton.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		serverField.setFont(new Font("Cooper Black", Font.PLAIN, 14));
+		nameField.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		serverList.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		waitLabel.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		gameLabel.setFont(new Font("Cooper Black", Font.PLAIN, 14));
@@ -87,10 +91,10 @@ public class DisplayPanel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				try {
 					if(serverList.getSelectedItem().equals("Host server")){
-						messages.put(new Message("start server", null));
+						messages.put(new Message("start server$"+nameField.getText(), null));
 					}
 					else if(serverList.getSelectedItem().equals("Vlad's Resnet")){
-						messages.put(new Message("connect to server$128.61.105.220$40000", null));
+						messages.put(new Message("connect to server$128.61.105.220$40000$"+nameField.getText(), null));
 					}
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
@@ -103,7 +107,7 @@ public class DisplayPanel extends JPanel{
 
 			public void actionPerformed(ActionEvent e) {
 				try {
-					messages.put(new Message("connect to server$" + serverField.getText() + "$" + 40000, null));
+					messages.put(new Message("connect to server$" + serverField.getText() + "$40000$"+nameField.getText(), null));
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
@@ -172,6 +176,13 @@ public class DisplayPanel extends JPanel{
 		
 		c.gridx = 1;
 		c.gridy = 1;
+		c.weighty = 0.1;
+		c.gridwidth = 1;
+		c.weightx = 0.1;
+		connectPanel.add(nameField,c);
+		
+		c.gridx = 1;
+		c.gridy = 2;
 		c.gridwidth = 1;
 		c.weighty = 0.1;
 		c.weightx = 0.1;
@@ -181,14 +192,14 @@ public class DisplayPanel extends JPanel{
 		connectPanel.add(connectButtonA,c);
 		
 		c.gridx = 1;
-		c.gridy = 2;
+		c.gridy = 3;
 		connectPanel.add(serverField,c);
 		
 		c.gridx = 3;
 		connectPanel.add(connectButtonB, c);
 
 		c.gridx = 0;
-		c.gridy = 3;
+		c.gridy = 4;
 		c.weightx = 0.3;
 		connectPanel.add(new JLabel(), c);
 		

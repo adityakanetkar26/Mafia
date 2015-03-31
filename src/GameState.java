@@ -62,6 +62,9 @@ public class GameState {
 			String value = updates[a+1];
 			
 			switch(field){
+			case "name":
+				player.name = value;
+				break;
 			case "role":
 				player.role = value;
 				break;
@@ -106,7 +109,7 @@ public class GameState {
 				}
 			}
 			else{
-				startTimer("day", 20);
+				startTimer("day", 60);
 			}
 			//allow bad chat
 		}
@@ -180,7 +183,8 @@ public class GameState {
 	}
 	
 	public String getPlayerState(Player player){
-		return "role#" + player.role + "#alive#" + (player.aliveDead ? "alive" : "dead");
+		return "role#" + player.role + "#alive#" + (player.aliveDead ? "alive" : "dead") + 
+				"#name#" + player.name + "#vote#"+(player.votingAgainst==null ? "null" : player.votingAgainst);
 	}
 	
 	public String getGameState(){
