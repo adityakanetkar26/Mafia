@@ -109,7 +109,7 @@ public class GameState {
 				}
 			}
 			else{
-				startTimer("day", 60);
+				startTimer("day", 30);
 			}
 			//allow bad chat
 		}
@@ -125,7 +125,7 @@ public class GameState {
 				}
 			}
 			else{				
-				startTimer("night", 30);
+				startTimer("night", 60);
 			}
 			//allow voting
 			//allow chat	
