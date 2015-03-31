@@ -255,17 +255,27 @@ public class DisplayPanel extends JPanel{
 			double ry = (this.getHeight()-py-40)/2;
 			double rx = (this.getWidth()-px-40)/2;
 			
+			double ary = (this.getHeight()-2*py-40)/2;
+			double arx = (this.getWidth()-2*px-40)/2;
+	
+			double dx = Math.sqrt(arx*arx + ary*ary);
+			
 			if(player == state.self){
 				playerView.x = (int) (rx) + 20;
 				playerView.y = (int) (ry + ry) + 20;
+				playerView.ax = (int) (arx + px + 20);
+				playerView.ay = (int) (ary + py + 20+ 100);
 			}
 			else{
 				playerView.x = (int) (rx + 20 + Math.cos(Math.PI*2*count/numPlayers - Math.PI/2)*rx);
-				playerView.y = (int) (ry + 20 + - Math.sin(Math.PI*2*count/numPlayers - Math.PI/2)*ry);
+				playerView.y = (int) (ry + 20 - Math.sin(Math.PI*2*count/numPlayers - Math.PI/2)*ry);
+				playerView.ax = (int) (arx + px + 20 + Math.cos(Math.PI*2*count/numPlayers - Math.PI/2)*arx*.9);
+				playerView.ay = (int) (ary + py + 20 - Math.sin(Math.PI*2*count/numPlayers - Math.PI/2)*ary*.9);
 				count++;
 			}
 			playerView.rx = (int) (playerView.x + px);
 			playerView.ry = (int) (playerView.y + py);
+			
 			g.drawImage(img,playerView.x,playerView.y, (int)px, (int)py, null);
 			
 		}
@@ -274,10 +284,10 @@ public class DisplayPanel extends JPanel{
 			g.setColor(new Color(150,0,0));
 			if(playerView.visibleVote != null){
 				PlayerView target = playerViews.get(playerView.visibleVote);
-				g.drawLine(playerView.x, playerView.y, target.x, target.y);
-				double dist = Math.sqrt((playerView.x - target.x)*(playerView.x - target.x) + (playerView.y - target.y)*(playerView.y - target.y));
-				g.drawLine(target.x, target.y, (int)(target.x + 10.0*(playerView.x - target.x)/dist-5.0*(playerView.y - target.y)/dist), (int)(target.y + 10.0*(playerView.y - target.y)/dist+5.0*(playerView.x - target.x)/dist));
-				g.drawLine(target.x, target.y, (int)(target.x + 10.0*(playerView.x - target.x)/dist+5.0*(playerView.y - target.y)/dist), (int)(target.y + 10.0*(playerView.y - target.y)/dist-5.0*(playerView.x - target.x)/dist));
+				g.drawLine(playerView.ax, playerView.ay, target.ax, target.ay);
+				double dist = Math.sqrt((playerView.ax - target.ax)*(playerView.ax - target.ax) + (playerView.ay - target.ay)*(playerView.ay - target.ay));
+				g.drawLine(target.ax, target.ay, (int)(target.ax + 10.0*(playerView.ax - target.ax)/dist-5.0*(playerView.ay - target.ay)/dist), (int)(target.ay + 10.0*(playerView.ay - target.ay)/dist+5.0*(playerView.ax - target.ax)/dist));
+				g.drawLine(target.ax, target.ay, (int)(target.ax + 10.0*(playerView.ax - target.ax)/dist+5.0*(playerView.ay - target.ay)/dist), (int)(target.ay + 10.0*(playerView.ay - target.ay)/dist-5.0*(playerView.ax - target.ax)/dist));
 			}
 			g.setColor(new Color(250,125,0));
 			g.setFont(new Font("Cooper Black", Font.PLAIN, 18));
@@ -339,6 +349,8 @@ public class DisplayPanel extends JPanel{
 		int y;
 		int rx;
 		int ry;
+		int ax;
+		int ay;
 		Player visibleVote;
 		
 	}
