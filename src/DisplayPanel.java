@@ -295,6 +295,26 @@ public class DisplayPanel extends JPanel{
 			
 		}
 		
+		if(state.gamePhase.equals("day")){
+			gameLabel.setText("The day has dawned... Choose whom to lynch " + state.timeRemaining);
+		}
+		else if(state.gamePhase.equals("night")){
+			gameLabel.setText("Night has fallen... The mafia choose a target " + state.timeRemaining);
+		}
+		else if(state.gamePhase.equals("over")){
+			int good = 0;
+			int bad = 0;
+			for(Player player : state.players.values()){
+				if(player.role.equals("good") && player.aliveDead){
+					good++;
+				}
+				else if(player.role.equals("bad") && player.aliveDead){
+					bad++;
+				}
+			}
+			gameLabel.setText("Game over. " + (good > 0 ? "the citizens" : "the mafia") + " have won.");
+		}
+		
 	}//end repaint
 	
 	public void updateDisplay(){
@@ -317,6 +337,8 @@ public class DisplayPanel extends JPanel{
 			else{
 				this.remove(waitLabel);
 			}
+			this.add(gameLabel);
+			this.revalidate();
 		}
 	}
 	

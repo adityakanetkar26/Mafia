@@ -20,6 +20,8 @@ public class GameState {
 	Player self;
 	
 	String gamePhase = "not in game";
+	int timeRemaining = 0;
+	//Timer timer = new Timer();
 	
 	public void addPlayer(Player player){
 		players.put(player.id, player);
@@ -154,11 +156,23 @@ public class GameState {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				timer.cancel();
 			}
 			
 		}, 1000*seconds);
-		
-		
+		timeRemaining = seconds+1;
+		timer.scheduleAtFixedRate(new TimerTask(){
+
+			public void run() {
+				timeRemaining--;
+				try {
+					messages.put(new Message("timer$"+timeRemaining,null));
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}			
+
+		}, 0, 1000);
 	}
 	
 	public void stateUpdateClient(String update){

@@ -42,6 +42,10 @@ public class ClientEngine extends Engine{
 		case "game update":
 			state.stateUpdateClient(tokens[1]);
 			break;
+		
+		case "timer":
+			state.timeRemaining=Integer.parseInt(tokens[1]);
+			break;
 			
 		default: 
 			System.out.println("What the hell even is this");

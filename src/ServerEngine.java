@@ -47,7 +47,11 @@ public class ServerEngine extends Engine{
 			}
 			messages.add(new Message("game update$night", null));
 			break;
-			
+		case "timer":
+			for(NetConnection net : playerConnections.values()){
+				net.sendMessage("timer$" + tokens[1]);
+			}
+			break;
 		default: 
 			System.out.println("What the hell even is this");	
 		}//end switch
