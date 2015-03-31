@@ -71,7 +71,12 @@ public class GameState {
 				break;
 			case "chat":
 				//check if player is supposed to see the message
-				chatMessages.enqueue(value);
+				boolean aliveOrDead = player.isAliveOrDead();
+				String playerRole = player.getRole();
+				if(aliveOrDead && gamePhase.equals("night") && playerRole.equals("bad"))
+					chatMessages.enqueue(value);
+				else if(aliveOrDead && gamePhase.equals("day"))
+					chatMessages.enqueue(value);
 				break;
 			default:
 				System.out.println("weird update..");
@@ -101,7 +106,12 @@ public class GameState {
 				}
 		}
 		else if(gamePhase.equals("over")){
-			//Display the result
+			//Display the result to all players
+			if(badPlayerCount == 0)
+				System.out.println("Good Players Win");
+			else if(goodPlayerCount == 0)
+				System.out.println("Bad Players Win");
+				
 		}
 	}
 	
