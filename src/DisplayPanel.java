@@ -229,7 +229,6 @@ public class DisplayPanel extends JPanel{
 				visibleRole = "unassigned";
 			}
 			if(!visibleRole.equals(playerView.visibleRole)){
-				System.out.println(visibleRole + " " + playerView.visibleRole);
 				playerView.visibleRole = visibleRole;
 				Random rand = new Random();
 				if(visibleRole.equals("good")){
@@ -242,7 +241,8 @@ public class DisplayPanel extends JPanel{
 					playerView.pic = unkPics[rand.nextInt(unkPics.length)];
 				}
 			}
-			if(player.votingAgainst!=null){
+			playerView.visibleVote = null;
+			if(player.votingAgainst!=null && (state.gamePhase.equals("day") || (state.gamePhase.equals("night") && state.self.role.equals("bad") && player.role.equals("bad")))){
 				playerView.visibleVote = state.players.get(Integer.parseInt(player.votingAgainst));
 			}
 			
@@ -281,7 +281,7 @@ public class DisplayPanel extends JPanel{
 		}
 		for(Player player : state.players.values()){
 			PlayerView playerView = playerViews.get(player);
-			g.setColor(new Color(150,0,0));
+			g.setColor(new Color(250,125,0));
 			if(playerView.visibleVote != null){
 				PlayerView target = playerViews.get(playerView.visibleVote);
 				g.drawLine(playerView.ax, playerView.ay, target.ax, target.ay);
@@ -291,7 +291,7 @@ public class DisplayPanel extends JPanel{
 			}
 			g.setColor(new Color(250,125,0));
 			g.setFont(new Font("Cooper Black", Font.PLAIN, 18));
-			g.drawString((player == state.self ? "YOU - " : "") + player.name + (playerView.visibleRole.equals("unassigned") ? "" : ", " + player.role), playerView.x, playerView.y-5);
+			g.drawString((player == state.self ? "YOU - " : "") + player.name + (playerView.visibleRole.equals("unassigned") ? "" : ", " + player.role) + (player.aliveDead ? "" : " (Dead)"), playerView.x, playerView.y-5);
 			
 		}
 		

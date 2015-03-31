@@ -5,7 +5,7 @@ public class Player {
 	int id;
 	String role; //good, bad, Unassigned
 	boolean aliveDead; //Alive Player: True, Dead Player: False
-	String votingAgainst;
+	String votingAgainst = null;
 	String name;
 	ArrayList<Player> visiblePlayers;
 		

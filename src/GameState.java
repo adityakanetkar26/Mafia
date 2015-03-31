@@ -63,11 +63,18 @@ public class GameState {
 			case "role":
 				player.role = value;
 				break;
-			case "alive":
+			case "alive":	
 				player.aliveDead = (value.equals("alive"));
 				break;
 			case "vote":
-				player.votingAgainst = value;
+				if(value.equals("null")){
+					player.votingAgainst = null;
+				}
+				else{
+					if(player.aliveDead && (gamePhase.equals("day") || (gamePhase.equals("night") && player.role.equals("bad")))){
+						player.votingAgainst = value;
+					}
+				}	
 				break;
 			case "chat":
 				//check if player is supposed to see the message
@@ -85,27 +92,42 @@ public class GameState {
 	}
 	
 	public void stateUpdateServer(String update){
-		gamePhase = update;
-		if(gamePhase.equals("night")){
-			startTimer("day", 30);
-			//allow bad chat
-		}
-		else if(gamePhase.equals("day")){
-			boolean overOrNot = checkEnd();
-			
-			if(!overOrNot){
-				startTimer("night", 120);
-				//allow voting
-				//allow chat	
+		if(update.equals("night")){
+			if(gamePhase.equals("day")){
+				collectAndProcessVotes();
 			}
-			else
+			if(checkEnd()){
 				try {
 					messages.put(new Message("game update$over",null));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+			}
+			else{
+				startTimer("day", 20);
+			}
+			//allow bad chat
 		}
-		else if(gamePhase.equals("over")){
+		else if(update.equals("day")){
+			if(gamePhase.equals("night")){
+				collectAndProcessVotes();
+			}
+			if(checkEnd()){
+				try {
+					messages.put(new Message("game update$over",null));
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			else{				
+				startTimer("night", 30);
+			}
+			//allow voting
+			//allow chat	
+
+
+		}
+		else if(update.equals("over")){
 			//Display the result to all players
 			if(badPlayerCount == 0)
 				System.out.println("Good Players Win");
@@ -113,6 +135,7 @@ public class GameState {
 				System.out.println("Bad Players Win");
 				
 		}
+		gamePhase = update;
 	}
 	
 	private boolean checkEnd(){
@@ -151,35 +174,45 @@ public class GameState {
 	}
 	
 	public void collectAndProcessVotes(){
-		Integer[] votes = {0};
-		int i = 0;
+		Player maxPlayer = (Player) players.values().toArray()[0];
+		int maxVotes = 0;
+		HashMap<Player, Integer> votes = new HashMap<Player, Integer>();
+		for(Player player : players.values()){
+			votes.put(player, 0);
+		}
+
 		for(Player player : players.values()){
 			String vote = player.getVote();
-			votes[i] = Integer.parseInt(vote);
-			i++;
-		}
-		
-		Map<Integer, Integer> voteFreq = new HashMap<Integer, Integer>();
-		for(i = 0; i < votes.length; i++){
-			voteFreq.put(votes[i], voteFreq.get(votes[i]) + 1);			
-		}
-		
-		int max = 0;
-		for(Map.Entry<Integer, Integer> voteF : voteFreq.entrySet() ){
-			if(voteF.getValue() >= max){
-				max = voteF.getKey();
+			if(vote != null){
+				votes.put(players.get(Integer.parseInt(vote)), votes.get(players.get(Integer.parseInt(vote)))+1);
+				if(votes.get(players.get(Integer.parseInt(vote)))>maxVotes){
+					maxVotes = votes.get(players.get(Integer.parseInt(vote)));
+					maxPlayer = players.get(Integer.parseInt(vote));
+				}
 			}
 		}
 		
-		Player deadPlayer = players.get(max);
-		deadPlayer.updateRole(false);
-		
-		//Update Good Player or Bad Player Count
-		if(deadPlayer.getRole().equals("good")){
+		if(maxPlayer.role.equals("good")){
 			goodPlayerCount--;
-		} else if(deadPlayer.getRole().equals("bad")){
+		}
+		else{
 			badPlayerCount--;
 		}
+
+		try {
+			messages.put(new Message("player update$" + maxPlayer.id + "$alive#dead",null));
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+
+		
+		for(Player player : players.values()){
+			try {
+				messages.put(new Message("player update$" + player.id + "$vote#null",null));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		} 
 	}
 	
 
