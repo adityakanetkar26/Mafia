@@ -30,7 +30,6 @@ public class DisplayPanel extends JPanel{
 	GameState state;
 	JPanel connectPanel;
 	JButton startButton;
-	JLabel waitLabel;
 	JLabel gameLabel;
 	String displayState = "not in game";
 	
@@ -61,15 +60,13 @@ public class DisplayPanel extends JPanel{
 		JTextField nameField = new JTextField("Player name");
 		JButton connectButtonB = new JButton("Connect");
 		startButton = new JButton("Start Game...");
-		waitLabel = new JLabel("Waiting for game start...");
-		gameLabel = new JLabel("");
+		gameLabel = new JLabel("Waiting for game start...");
 		connectButtonA.setForeground(new Color(250,125,0));
 		connectButtonB.setForeground(new Color(250,125,0));
 		startButton.setForeground(new Color(250,125,0));
 		serverField.setForeground(new Color(250,125,0));
 		nameField.setForeground(new Color(250,125,0));
 		serverList.setForeground(new Color(250,125,0));
-		waitLabel.setForeground(new Color(250,125,0));
 		gameLabel.setForeground(new Color(250,125,0));
 		connectButtonA.setBackground(new Color(0,40,80));
 		connectButtonB.setBackground(new Color(0,40,80));
@@ -83,8 +80,7 @@ public class DisplayPanel extends JPanel{
 		serverField.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		nameField.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		serverList.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		waitLabel.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		gameLabel.setFont(new Font("Cooper Black", Font.PLAIN, 14));
+		gameLabel.setFont(new Font("Cooper Black", Font.PLAIN, 20));
 
 		connectButtonA.addActionListener(new ActionListener(){
 
@@ -312,18 +308,18 @@ public class DisplayPanel extends JPanel{
 		else if(state.gamePhase.equals("night")){
 			gameLabel.setText("Night has fallen... The mafia choose a target " + state.timeRemaining);
 		}
-		else if(state.gamePhase.equals("over")){
-			int good = 0;
-			int bad = 0;
-			for(Player player : state.players.values()){
-				if(player.role.equals("good") && player.aliveDead){
-					good++;
-				}
-				else if(player.role.equals("bad") && player.aliveDead){
-					bad++;
-				}
-			}
-			gameLabel.setText("Game over. " + (good > 0 ? "the citizens" : "the mafia") + " have won.");
+		else if(state.gamePhase.equals("awaiting players")){
+//			int good = 0;
+//			int bad = 0;
+//			for(Player player : state.players.values()){
+//				if(player.role.equals("good") && player.aliveDead){
+//					good++;
+//				}
+//				else if(player.role.equals("bad") && player.aliveDead){
+//					bad++;
+//				}
+//			}
+			gameLabel.setText((state.winner == null ? "" : "Game over, " + state.winner + " won.") + "Waiting for game start...");
 		}
 		
 	}//end repaint
@@ -336,20 +332,28 @@ public class DisplayPanel extends JPanel{
 				this.add(startButton);
 			}
 			else{
-				this.add(waitLabel);
+				this.add(gameLabel);
 			}
 			this.revalidate();
 			
 		}
 		else if(!state.gamePhase.equals("awaiting players") && displayState.equals("awaiting players")){
+			displayState = state.gamePhase;
 			if(ServerEngine.serverEngine!=null){
 				this.remove(startButton);
+				this.add(gameLabel);
+				this.revalidate();
 			}
-			else{
-				this.remove(waitLabel);
+			
+			
+		}
+		else if(state.gamePhase.equals("awaiting players") && !displayState.equals("awaiting players")){
+			displayState = state.gamePhase;
+			if(ServerEngine.serverEngine!=null){
+				this.remove(gameLabel);
+				this.add(startButton);
+				this.revalidate();
 			}
-			this.add(gameLabel);
-			this.revalidate();
 		}
 	}
 	

@@ -21,7 +21,7 @@ public class GameState {
 	
 	String gamePhase = "not in game";
 	int timeRemaining = 0;
-	String winner = "";
+	String winner = null;
 	
 	public void addPlayer(Player player){
 		players.put(player.id, player);
@@ -126,7 +126,7 @@ public class GameState {
 				messages.put(new Message("game transition$startday",null));
 			}
 			else{
-				messages.put(new Message("game update$phase#over#winner#" + (badPlayerCount > 0 ? "mafia" : "citizens"),null));
+				messages.put(new Message("game update$phase#awaiting players#winner#" + (badPlayerCount > 0 ? "mafia" : "citizens"),null));
 			}
 			break;
 		case "endday":
@@ -135,7 +135,7 @@ public class GameState {
 				messages.put(new Message("game transition$startnight",null));
 			}
 			else{
-				messages.put(new Message("game update$phase#over#winner#" + (badPlayerCount > 0 ? "mafia" : "citizens"),null));
+				messages.put(new Message("game update$phase#awaiting players#winner#" + (badPlayerCount > 0 ? "mafia" : "citizens"),null));
 			}
 			break;
 		case "startnight":
