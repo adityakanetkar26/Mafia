@@ -40,7 +40,7 @@ public class ClientEngine extends Engine{
 			break;
 			
 		case "game update":
-			state.stateUpdateClient(tokens[1]);
+			state.stateUpdate(tokens[1]);
 			break;
 		
 		case "timer":

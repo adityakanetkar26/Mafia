@@ -21,7 +21,7 @@ public class GameState {
 	
 	String gamePhase = "not in game";
 	int timeRemaining = 0;
-	//Timer timer = new Timer();
+	String winner = "";
 	
 	public void addPlayer(Player player){
 		players.put(player.id, player);
@@ -35,6 +35,7 @@ public class GameState {
 		ArrayList<Player> unassignedPeople = new ArrayList<Player>();
 		for(Player player : players.values()){
 			player.role = "good";
+			player.aliveDead = true;
 			unassignedPeople.add(player);
 		}
 		
@@ -95,52 +96,60 @@ public class GameState {
 			}
 		}
 	}
+
 	
-	public void stateUpdateServer(String update){
-		if(update.equals("night")){
-			if(gamePhase.equals("day")){
-				collectAndProcessVotes();
+	public void stateUpdate(String update){
+		String[] updates = update.split("#");
+		for(int a = 0; a < updates.length; a = a + 2){
+			String field = updates[a];
+			String value = updates[a+1];
+
+			switch(field){
+			case "phase":
+				gamePhase = value;
+				break;
+			case "winner":
+				winner = value;
+				break;
+
+			default:
+				System.out.println("weird update..");
 			}
-			if(checkEnd()){
-				try {
-					messages.put(new Message("game update$over",null));
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+		}
+	}
+
+	public void gameTransition(String transition) throws InterruptedException{
+		switch(transition){
+		case "endnight":
+			collectAndProcessVotes();
+			if(!checkEnd()){
+				messages.put(new Message("game transition$startday",null));
 			}
 			else{
-				startTimer("day", 30);
+				messages.put(new Message("game update$phase#over#winner#" + (badPlayerCount > 0 ? "mafia" : "citizens"),null));
 			}
-			//allow bad chat
-		}
-		else if(update.equals("day")){
-			if(gamePhase.equals("night")){
-				collectAndProcessVotes();
+			break;
+		case "endday":
+			collectAndProcessVotes();
+			if(!checkEnd()){
+				messages.put(new Message("game transition$startnight",null));
 			}
-			if(checkEnd()){
-				try {
-					messages.put(new Message("game update$over",null));
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+			else{
+				messages.put(new Message("game update$phase#over#winner#" + (badPlayerCount > 0 ? "mafia" : "citizens"),null));
 			}
-			else{				
-				startTimer("night", 60);
-			}
-			//allow voting
-			//allow chat	
+			break;
+		case "startnight":
+			messages.put(new Message("game update$phase#night",null));
+			startTimer("game transition$endnight", 30);
+			break;
+		case "startday":
+			messages.put(new Message("game update$phase#day",null));
+			startTimer("game transition$endday", 60);
+			break;
 
-
+		default:
+			System.out.println("weird update..");
 		}
-		else if(update.equals("over")){
-			//Display the result to all players
-			if(badPlayerCount == 0)
-				System.out.println("Good Players Win");
-			else if(goodPlayerCount == 0)
-				System.out.println("Bad Players Win");
-				
-		}
-		gamePhase = update;
 	}
 	
 	private boolean checkEnd(){
@@ -155,7 +164,7 @@ public class GameState {
 		timer.schedule(new TimerTask(){
 			public void run() {
 				try {
-					messages.put(new Message("game update$"+update,null));
+					messages.put(new Message(update,null));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -178,17 +187,13 @@ public class GameState {
 		}, 0, 1000);
 	}
 	
-	public void stateUpdateClient(String update){
-		gamePhase = update;
-	}
-	
 	public String getPlayerState(Player player){
 		return "role#" + player.role + "#alive#" + (player.aliveDead ? "alive" : "dead") + 
 				"#name#" + player.name + "#vote#"+(player.votingAgainst==null ? "null" : player.votingAgainst);
 	}
 	
 	public String getGameState(){
-		return gamePhase;
+		return "phase#" + gamePhase;
 	}
 	
 	public void collectAndProcessVotes(){

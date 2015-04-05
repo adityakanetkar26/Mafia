@@ -36,8 +36,16 @@ public class ServerEngine extends Engine{
 			break;
 			
 		case "game update":
-			state.stateUpdateServer(tokens[1]);
+			state.stateUpdate(tokens[1]);
 			propagateGameUpdate(tokens[1]);
+			break;
+		
+		case "game transition":
+			try {
+				state.gameTransition(tokens[1]);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			break;
 			
 		case "start game":
@@ -45,7 +53,7 @@ public class ServerEngine extends Engine{
 			for(Player player : state.players.values()){
 				propagatePlayerUpdate(Integer.toString(player.id), state.getPlayerState(player));
 			}
-			messages.add(new Message("game update$night", null));
+			messages.add(new Message("game transition$startnight", null));
 			break;
 		case "timer":
 			for(NetConnection net : playerConnections.values()){
