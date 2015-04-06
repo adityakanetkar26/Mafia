@@ -86,10 +86,13 @@ public class GameState {
 				//check if player is supposed to see the message
 				boolean aliveOrDead = player.isAliveOrDead();
 				String playerRole = player.getRole();
-				if(aliveOrDead && gamePhase.equals("night") && playerRole.equals("bad"))
-					chatMessages.enqueue(value);
-				else if(aliveOrDead && gamePhase.equals("day"))
-					chatMessages.enqueue(value);
+				if((gamePhase.equals("awaiting players") || aliveOrDead) && self!=null)
+				{
+					if(!(gamePhase.equals("night") && self.role.equals("good") && self.isAliveOrDead())){
+						chatMessages.enqueue(player.name + " >  " + value);
+					}
+				}
+
 				break;
 			default:
 				System.out.println("weird update..");

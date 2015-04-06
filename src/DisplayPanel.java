@@ -319,7 +319,7 @@ public class DisplayPanel extends JPanel{
 //					bad++;
 //				}
 //			}
-			gameLabel.setText((state.winner == null ? "" : "Game over, " + state.winner + " won.") + "Waiting for game start...");
+			gameLabel.setText((state.winner == null ? "" : "Game over, " + state.winner + " won. ") + "Waiting for game start...");
 		}
 		
 	}//end repaint
