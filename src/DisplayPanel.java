@@ -298,7 +298,7 @@ public class DisplayPanel extends JPanel{
 			}
 			g.setColor(new Color(250,125,0));
 			g.setFont(new Font("Cooper Black", Font.PLAIN, 18));
-			g.drawString((player == state.self ? "YOU - " : "") + player.name + (playerView.visibleRole.equals("unassigned") ? "" : ", " + player.role) + (player.aliveDead ? "" : " (Dead)"), playerView.x, playerView.y-5);
+			g.drawString((player == state.self ? "YOU - " : "") + player.name + (playerView.visibleRole.equals("unassigned") ? "" : ", " + (player.role.equals("good") ? "Citizen" : "Mafioso")) + (player.aliveDead ? "" : " (Dead)"), playerView.x, playerView.y-5);
 			
 		}
 		

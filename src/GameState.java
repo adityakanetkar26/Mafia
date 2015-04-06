@@ -82,20 +82,23 @@ public class GameState {
 					}
 				}	
 				break;
-			case "chat":
-				//check if player is supposed to see the message
-				boolean aliveOrDead = player.isAliveOrDead();
-				String playerRole = player.getRole();
-				if((gamePhase.equals("awaiting players") || aliveOrDead) && self!=null)
-				{
-					if(!(gamePhase.equals("night") && self.role.equals("good") && self.isAliveOrDead())){
-						chatMessages.enqueue(player.name + " >  " + value);
-					}
-				}
-
-				break;
 			default:
 				System.out.println("weird update..");
+			}
+		}
+	}
+	
+	public void processChat(String s, String r, String msg){
+		Player sender = players.get(Integer.parseInt(s));
+		Player receiver = null;
+		if(!r.equals("all")){
+			receiver = players.get(Integer.parseInt(r));
+		}
+
+		if((receiver == null || receiver == self || sender == self) && (gamePhase.equals("awaiting players") || sender.aliveDead) && self!=null)
+		{
+			if(!(gamePhase.equals("night") && self.isAliveOrDead() && !(self.role.equals("bad") && sender.role.equals("bad")))){
+				chatMessages.enqueue(sender.name + (receiver == null ? " (to all):  " : " (to " + receiver.name + "):  ") + msg);
 			}
 		}
 	}

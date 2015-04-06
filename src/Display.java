@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.BoxLayout;
@@ -22,6 +23,7 @@ public class Display extends JFrame{
 	DisplayPanel displayPanel;
 	JScrollPane textAreaScroll;
 	JComboBox chatList;
+	HashMap<Integer, Player> chatListMap = new HashMap<Integer, Player>();
 	
 	public Display(LinkedBlockingQueue<Message> msgs, GameState s){
 		super("CS 7270");
@@ -57,7 +59,14 @@ public class Display extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				if(!input.getText().equals("") && state.self!=null){
 					try {
-						messages.put(new Message("player update$" + state.self.id + "$chat#" +input.getText(), null));
+						String receiver = "";
+						if(chatList.getSelectedItem().equals("Send to: everyone")){
+							receiver = "all";
+						}
+						else{
+							receiver = Integer.toString(chatListMap.get(chatList.getSelectedIndex()).id);
+						}
+						messages.put(new Message("chat$" + state.self.id + "$" + receiver + "$" +input.getText(), null));
 					} catch (InterruptedException e) {
 						System.out.println("display fucked up message put");
 						e.printStackTrace();
@@ -90,6 +99,15 @@ public class Display extends JFrame{
 	}
 	
 	public void updateDisplay(){
+
+		for(Player player : state.players.values()){
+			if(!chatListMap.containsValue(player)){
+				chatList.addItem(player.name);
+				chatListMap.put(chatList.getItemCount()-1, player);
+			}
+		}
+		
+		
 		while(!state.chatMessages.isEmpty()){
 			try {
 				textArea.append(state.chatMessages.dequeue() + "\n");

@@ -55,6 +55,11 @@ public class ServerEngine extends Engine{
 			}
 			messages.add(new Message("game transition$startnight", null));
 			break;
+		case "chat":	
+			for(NetConnection net : playerConnections.values()){
+				net.sendMessage("chat$" + tokens[1] + "$" + tokens[2] + "$" + tokens[3]);
+			}
+			break;
 		case "timer":
 			for(NetConnection net : playerConnections.values()){
 				net.sendMessage("timer$" + tokens[1]);

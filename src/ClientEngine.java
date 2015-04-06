@@ -43,6 +43,14 @@ public class ClientEngine extends Engine{
 			state.stateUpdate(tokens[1]);
 			break;
 		
+		case "chat":	
+			if(message.source != serverConnection){
+				serverConnection.sendMessage("chat$" + tokens[1] + "$" + tokens[2] + "$" + tokens[3]);
+			}
+			else{
+				state.processChat(tokens[1], tokens[2], tokens[3]);
+			}
+			break;
 		case "timer":
 			state.timeRemaining=Integer.parseInt(tokens[1]);
 			break;
