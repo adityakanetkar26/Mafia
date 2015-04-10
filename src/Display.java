@@ -57,24 +57,35 @@ public class Display extends JFrame{
 		input.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent arg0) {
-				if(!input.getText().equals("") && state.self!=null){
-					try {
-						String receiver = "";
-						if(chatList.getSelectedItem().equals("Send to: everyone")){
-							receiver = "all";
+				if(!input.getText().equals("")){
+					if(input.getText().startsWith("cmd/")){
+						try {
+							messages.put(new Message(input.getText().substring(4),null));
+						} catch (InterruptedException e) {
+							e.printStackTrace();
 						}
-						else{
-							receiver = Integer.toString(chatListMap.get(chatList.getSelectedIndex()).id);
+					}
+					else{
+						if(state.self != null){
+							try {
+								String receiver = "";
+								if(chatList.getSelectedItem().equals("Send to: everyone")){
+									receiver = "all";
+								}
+								else{
+									receiver = Integer.toString(chatListMap.get(chatList.getSelectedIndex()).id);
+								}
+								messages.put(new Message("chat$" + state.self.id + "$" + receiver + "$" +input.getText(), null));
+							} catch (InterruptedException e) {
+								System.out.println("display fucked up message put");
+								e.printStackTrace();
+							}
 						}
-						messages.put(new Message("chat$" + state.self.id + "$" + receiver + "$" +input.getText(), null));
-					} catch (InterruptedException e) {
-						System.out.println("display fucked up message put");
-						e.printStackTrace();
 					}
 				}
 				input.setText("");	
 			}
-			
+
 		});
 		
 		JPanel chatPanel = new JPanel();
