@@ -58,11 +58,15 @@ public class DisplayPanel extends JPanel{
 		//connectPanel.setPreferredSize(this.getSize());
 		//connectPanel.setLayout(new BoxLayout(connectPanel, BoxLayout.Y_AXIS));
 		JPanel settingsPanel = new JPanel();
-		settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.X_AXIS));
+		settingsPanel.setLayout(new GridLayout(3,2));
 		settingsPanel.setBackground(new Color(0,40,80));
 		
 		JCheckBox ballotBox = new JCheckBox("Open Ballot", true);
 		JCheckBox privateBox = new JCheckBox("Private Chat", true);
+		JLabel dayLabel = new JLabel("Day Seconds: ");
+		JLabel nightLabel = new JLabel("Night Seconds: ");
+		JTextField dayField = new JTextField("60");
+		JTextField nightField = new JTextField("30");
 		JComboBox serverList = new JComboBox(new String[]{"Choose a server...", "Host server", "Vlad's Resnet"});
 		JButton connectButtonA = new JButton("Connect");
 		JTextField serverField = new JTextField("...or enter IP adress here.");
@@ -79,6 +83,10 @@ public class DisplayPanel extends JPanel{
 		gameLabel.setForeground(new Color(250,125,0));
 		ballotBox.setForeground(new Color(250,125,0));
 		privateBox.setForeground(new Color(250,125,0));
+		dayLabel.setForeground(new Color(250,125,0));
+		nightLabel.setForeground(new Color(250,125,0));
+		dayField.setForeground(new Color(250,125,0));
+		nightField.setForeground(new Color(250,125,0));
 		connectButtonA.setBackground(new Color(0,40,80));
 		connectButtonB.setBackground(new Color(0,40,80));
 		startButton.setBackground(new Color(0,40,80));
@@ -87,6 +95,10 @@ public class DisplayPanel extends JPanel{
 		serverList.setBackground(new Color(0,40,80));
 		ballotBox.setBackground(new Color(0,40,80));
 		privateBox.setBackground(new Color(0,40,80));
+		dayField.setBackground(new Color(0,40,80));
+		nightField.setBackground(new Color(0,40,80));
+		dayLabel.setBackground(new Color(0,40,80));
+		nightLabel.setBackground(new Color(0,40,80));
 		connectButtonA.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		connectButtonB.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		startButton.setFont(new Font("Cooper Black", Font.PLAIN, 14));
@@ -95,6 +107,10 @@ public class DisplayPanel extends JPanel{
 		serverList.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		ballotBox.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		privateBox.setFont(new Font("Cooper Black", Font.PLAIN, 14));
+		dayField.setFont(new Font("Cooper Black", Font.PLAIN, 14));
+		nightField.setFont(new Font("Cooper Black", Font.PLAIN, 14));
+		dayLabel.setFont(new Font("Cooper Black", Font.PLAIN, 14));
+		nightLabel.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		gameLabel.setFont(new Font("Cooper Black", Font.PLAIN, 20));
 
 		connectButtonA.addActionListener(new ActionListener(){
@@ -103,7 +119,8 @@ public class DisplayPanel extends JPanel{
 				try {
 					if(serverList.getSelectedItem().equals("Host server")){
 						messages.put(new Message("start server$"+nameField.getText()+
-							"$open ballot#" + (ballotBox.isSelected()? "yes" : "no") + "#private chat#" + (privateBox.isSelected()? "yes" : "no"), null));
+							"$open ballot#" + (ballotBox.isSelected()? "yes" : "no") + "#private chat#" + (privateBox.isSelected()? "yes" : "no")+
+							"#day seconds#" + dayField.getText() + "#night seconds#" + nightField.getText(), null));
 					}
 					else if(serverList.getSelectedItem().equals("Vlad's Resnet")){
 						messages.put(new Message("connect to server$128.61.105.220$40000$"+nameField.getText(), null));
@@ -191,6 +208,10 @@ public class DisplayPanel extends JPanel{
 		
 		settingsPanel.add(privateBox);
 		settingsPanel.add(ballotBox);
+		settingsPanel.add(dayLabel);
+		settingsPanel.add(dayField);
+		settingsPanel.add(nightLabel);
+		settingsPanel.add(nightField);
 		
 		ImageIcon icon = new ImageIcon(mafPics[0]);
 		JLabel connectTopLabel = new JLabel("Welcome to Mafia, son", icon, JLabel.CENTER);

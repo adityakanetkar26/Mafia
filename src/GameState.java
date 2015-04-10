@@ -25,6 +25,8 @@ public class GameState {
 	
 	boolean openBallot = true;
 	boolean privateChat = true;
+	int daySeconds = 60;
+	int nightSeconds = 30;
 	
 	public void addPlayer(Player player){
 		players.put(player.id, player);
@@ -149,11 +151,11 @@ public class GameState {
 			break;
 		case "startnight":
 			messages.put(new Message("game update$phase#night",null));
-			startTimer("game transition$endnight", 30);
+			startTimer("game transition$endnight", nightSeconds);
 			break;
 		case "startday":
 			messages.put(new Message("game update$phase#day",null));
-			startTimer("game transition$endday", 60);
+			startTimer("game transition$endday", daySeconds);
 			break;
 
 		default:
@@ -206,7 +208,8 @@ public class GameState {
 	}
 	
 	public String getGameSettings(){
-		return "open ballot#" + (openBallot ? "yes" : "no") + "#private chat#" + (privateChat? "yes" : "no");
+		return "open ballot#" + (openBallot ? "yes" : "no") + "#private chat#" + (privateChat? "yes" : "no") + 
+				"#day seconds#" + daySeconds + "#night seconds#" + nightSeconds;
 	}
 	
 	public void setGameSettings(String update){
@@ -222,7 +225,12 @@ public class GameState {
 			case "private chat":
 				privateChat = value.equals("yes");
 				break;
-
+			case "day seconds":
+				daySeconds = Integer.parseInt(value);
+				break;
+			case "night seconds":
+				nightSeconds = Integer.parseInt(value);
+				break;
 			default:
 				System.out.println("weird setting.. " + field);
 			}
