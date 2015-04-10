@@ -12,8 +12,10 @@ public class ClientEngine extends Engine{
 		
 		case "start server":
 			ServerEngine.startServer();
+			ServerEngine.serverEngine.state.setGameSettings(tokens[2]);
 			try {
 				messages.put(new Message("connect to server$127.0.0.1$40000$" + tokens[1],null));
+				messages.put(new Message("game settings$" + tokens[2], null));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -54,7 +56,14 @@ public class ClientEngine extends Engine{
 		case "timer":
 			state.timeRemaining=Integer.parseInt(tokens[1]);
 			break;
-			
+		case "game settings":
+			if(message.source != serverConnection){
+				serverConnection.sendMessage("game settings$" + tokens[1]);
+			}
+			else{
+				state.setGameSettings(tokens[1]);
+			}
+			break;
 		default: 
 			System.out.println("What the hell even is this");
 		

@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -16,8 +18,10 @@ import java.util.Random;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -53,7 +57,12 @@ public class DisplayPanel extends JPanel{
 		//connectPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
 		//connectPanel.setPreferredSize(this.getSize());
 		//connectPanel.setLayout(new BoxLayout(connectPanel, BoxLayout.Y_AXIS));
+		JPanel settingsPanel = new JPanel();
+		settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.X_AXIS));
+		settingsPanel.setBackground(new Color(0,40,80));
 		
+		JCheckBox ballotBox = new JCheckBox("Open Ballot", true);
+		JCheckBox privateBox = new JCheckBox("Private Chat", true);
 		JComboBox serverList = new JComboBox(new String[]{"Choose a server...", "Host server", "Vlad's Resnet"});
 		JButton connectButtonA = new JButton("Connect");
 		JTextField serverField = new JTextField("...or enter IP adress here.");
@@ -68,18 +77,24 @@ public class DisplayPanel extends JPanel{
 		nameField.setForeground(new Color(250,125,0));
 		serverList.setForeground(new Color(250,125,0));
 		gameLabel.setForeground(new Color(250,125,0));
+		ballotBox.setForeground(new Color(250,125,0));
+		privateBox.setForeground(new Color(250,125,0));
 		connectButtonA.setBackground(new Color(0,40,80));
 		connectButtonB.setBackground(new Color(0,40,80));
 		startButton.setBackground(new Color(0,40,80));
 		serverField.setBackground(new Color(0,40,80));
 		nameField.setBackground(new Color(0,40,80));
 		serverList.setBackground(new Color(0,40,80));
+		ballotBox.setBackground(new Color(0,40,80));
+		privateBox.setBackground(new Color(0,40,80));
 		connectButtonA.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		connectButtonB.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		startButton.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		serverField.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		nameField.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		serverList.setFont(new Font("Cooper Black", Font.PLAIN, 14));
+		ballotBox.setFont(new Font("Cooper Black", Font.PLAIN, 14));
+		privateBox.setFont(new Font("Cooper Black", Font.PLAIN, 14));
 		gameLabel.setFont(new Font("Cooper Black", Font.PLAIN, 20));
 
 		connectButtonA.addActionListener(new ActionListener(){
@@ -87,7 +102,8 @@ public class DisplayPanel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				try {
 					if(serverList.getSelectedItem().equals("Host server")){
-						messages.put(new Message("start server$"+nameField.getText(), null));
+						messages.put(new Message("start server$"+nameField.getText()+
+							"$open ballot#" + (ballotBox.isSelected()? "yes" : "no") + "#private chat#" + (privateBox.isSelected()? "yes" : "no"), null));
 					}
 					else if(serverList.getSelectedItem().equals("Vlad's Resnet")){
 						messages.put(new Message("connect to server$128.61.105.220$40000$"+nameField.getText(), null));
@@ -125,6 +141,25 @@ public class DisplayPanel extends JPanel{
 
 		});
 		
+		serverList.addItemListener(new ItemListener(){
+			
+			public void itemStateChanged(ItemEvent arg0) {
+				if(serverList.getSelectedIndex()==1){
+					c.gridx = 1;
+					c.gridy = 3;
+					c.gridwidth = 3;
+					connectPanel.add(settingsPanel, c);
+					connectPanel.revalidate();
+				}
+				else{
+					connectPanel.remove(settingsPanel);
+					connectPanel.revalidate();
+				}
+				
+			}
+			
+		});
+		
 		this.addMouseListener(new MouseListener(){
 
 			public void mouseClicked(MouseEvent arg0) {
@@ -153,6 +188,9 @@ public class DisplayPanel extends JPanel{
 			}
 			
 		});
+		
+		settingsPanel.add(privateBox);
+		settingsPanel.add(ballotBox);
 		
 		ImageIcon icon = new ImageIcon(mafPics[0]);
 		JLabel connectTopLabel = new JLabel("Welcome to Mafia, son", icon, JLabel.CENTER);
@@ -188,14 +226,14 @@ public class DisplayPanel extends JPanel{
 		connectPanel.add(connectButtonA,c);
 		
 		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 4;
 		connectPanel.add(serverField,c);
 		
 		c.gridx = 3;
 		connectPanel.add(connectButtonB, c);
 
 		c.gridx = 0;
-		c.gridy = 4;
+		c.gridy = 5;
 		c.weightx = 0.3;
 		connectPanel.add(new JLabel(), c);
 		
@@ -249,7 +287,7 @@ public class DisplayPanel extends JPanel{
 				}
 			}
 			playerView.visibleVote = null;
-			if(player.votingAgainst!=null && (state.gamePhase.equals("day") || (state.gamePhase.equals("night") && state.self.role.equals("bad") && player.role.equals("bad")))){
+			if(player.votingAgainst!=null && (player == state.self || state.openBallot) && (state.gamePhase.equals("day") || (state.gamePhase.equals("night") && state.self.role.equals("bad") && player.role.equals("bad")))){
 				playerView.visibleVote = state.players.get(Integer.parseInt(player.votingAgainst));
 			}
 			

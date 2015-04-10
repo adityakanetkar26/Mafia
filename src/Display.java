@@ -100,13 +100,20 @@ public class Display extends JFrame{
 	
 	public void updateDisplay(){
 
-		for(Player player : state.players.values()){
-			if(!chatListMap.containsValue(player)){
-				chatList.addItem(player.name);
-				chatListMap.put(chatList.getItemCount()-1, player);
+		if(state.privateChat){
+			for(Player player : state.players.values()){
+				if(!chatListMap.containsValue(player)){
+					chatList.addItem(player.name);
+					chatListMap.put(chatList.getItemCount()-1, player);
+				}
 			}
 		}
-		
+		else{
+			for(int i : chatListMap.keySet()){
+				chatList.removeItem(chatListMap.get(i).name);
+			}
+			chatListMap.clear();
+		}
 		
 		while(!state.chatMessages.isEmpty()){
 			try {

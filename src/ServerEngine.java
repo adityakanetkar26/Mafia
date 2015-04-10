@@ -65,6 +65,10 @@ public class ServerEngine extends Engine{
 				net.sendMessage("timer$" + tokens[1]);
 			}
 			break;
+		case "game settings":
+			state.setGameSettings(tokens[1]);
+			propagateGameSettings();
+			break;
 		default: 
 			System.out.println("What the hell even is this");	
 		}//end switch
@@ -82,6 +86,12 @@ public class ServerEngine extends Engine{
 		}
 	}
 	
+	private void propagateGameSettings(){
+		for(NetConnection net : playerConnections.values()){
+			net.sendMessage("game settings$" + state.getGameSettings());
+		}
+	}
+	
 	private void playerJoin(Message message, String name){
 		if(!playerConnections.containsValue(message.source)){
 			playerCounter++;
@@ -94,7 +104,7 @@ public class ServerEngine extends Engine{
 				propagatePlayerUpdate(Integer.toString(player.id), state.getPlayerState(player));
 			}
 			propagateGameUpdate(state.getGameState());
-			
+			propagateGameSettings();
 		}
 	}
 }

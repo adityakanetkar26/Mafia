@@ -23,6 +23,9 @@ public class GameState {
 	int timeRemaining = 0;
 	String winner = null;
 	
+	boolean openBallot = true;
+	boolean privateChat = true;
+	
 	public void addPlayer(Player player){
 		players.put(player.id, player);
 	}
@@ -200,6 +203,30 @@ public class GameState {
 	
 	public String getGameState(){
 		return "phase#" + gamePhase;
+	}
+	
+	public String getGameSettings(){
+		return "open ballot#" + (openBallot ? "yes" : "no") + "#private chat#" + (privateChat? "yes" : "no");
+	}
+	
+	public void setGameSettings(String update){
+		String[] updates = update.split("#");
+		for(int a = 0; a < updates.length; a = a + 2){
+			String field = updates[a];
+			String value = updates[a+1];
+
+			switch(field){
+			case "open ballot":
+				openBallot = value.equals("yes");
+				break;
+			case "private chat":
+				privateChat = value.equals("yes");
+				break;
+
+			default:
+				System.out.println("weird setting.. " + field);
+			}
+		}		
 	}
 	
 	public void collectAndProcessVotes(){
