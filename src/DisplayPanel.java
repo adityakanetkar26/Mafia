@@ -199,7 +199,15 @@ public class DisplayPanel extends JPanel{
 				for(Player player : playerViews.keySet()){
 					PlayerView playerView = playerViews.get(player);
 					if(player != state.self && arg0.getX() > playerView.x && arg0.getX() < playerView.rx&& arg0.getY() > playerView.y && arg0.getY() < playerView.ry){
-						messages.add(new Message("player update$" + state.self.id + "$vote#" + player.id,null));
+						int voteTime = 0;
+						if(state.gamePhase.equals("day")){
+							voteTime = state.daySeconds - state.timeRemaining;
+						}
+						else if(state.gamePhase.equals("night")){
+							voteTime = state.nightSeconds - state.timeRemaining;
+						}
+						
+						messages.add(new Message("player update$" + state.self.id + "$vote#" + player.id + "#vote time#" + voteTime,null));
 					}
 				}
 			}

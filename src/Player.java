@@ -6,6 +6,7 @@ public class Player {
 	String role; //good, bad, Unassigned
 	boolean aliveDead; //Alive Player: True, Dead Player: False
 	String votingAgainst = null;
+	int voteTime;
 	String name;
 	ArrayList<Player> visiblePlayers;
 		

@@ -30,7 +30,7 @@ public class Display extends JFrame{
 		messages = msgs;
 		state = s;
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		//this.setPreferredSize(new Dimension(1200,800));
+		this.setPreferredSize(new Dimension(1200,800));
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		chatList = new JComboBox(new String[]{"Send to: everyone"});

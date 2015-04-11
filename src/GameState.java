@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +15,7 @@ public class GameState {
 	HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 	LinkedBlockingQueue<Message> messages;
 	Queue<String> chatMessages = new Queue<String>();
+	FileWriter logWriter;
 	
 	int badPlayerCount;
 	int goodPlayerCount;
@@ -25,6 +28,8 @@ public class GameState {
 	
 	boolean openBallot = true;
 	boolean privateChat = true;
+	boolean chatEnabled = true;
+	boolean nightChatEnabled = true;
 	int daySeconds = 60;
 	int nightSeconds = 30;
 	
@@ -86,6 +91,9 @@ public class GameState {
 						player.votingAgainst = value;
 					}
 				}	
+				break;
+			case "vote time":
+				player.voteTime = Integer.parseInt(value);
 				break;
 			default:
 				System.out.println("weird update..");
@@ -189,7 +197,7 @@ public class GameState {
 			public void run() {
 				timeRemaining--;
 				try {
-					messages.put(new Message("timer$"+timeRemaining,null));
+					messages.put(new Message("timer$"+timeRemaining,null,false));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -200,7 +208,8 @@ public class GameState {
 	
 	public String getPlayerState(Player player){
 		return "role#" + player.role + "#alive#" + (player.aliveDead ? "alive" : "dead") + 
-				"#name#" + player.name + "#vote#"+(player.votingAgainst==null ? "null" : player.votingAgainst);
+				"#name#" + player.name + "#vote#"+(player.votingAgainst==null ? "null" : player.votingAgainst) +
+				"#vote time#" + player.voteTime;
 	}
 	
 	public String getGameState(){
@@ -272,12 +281,26 @@ public class GameState {
 		
 		for(Player player : players.values()){
 			try {
-				messages.put(new Message("player update$" + player.id + "$vote#null",null));
+				messages.put(new Message("player update$" + player.id + "$vote#null",null,false));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		} 
-	}
+	}//end vote
 	
+	
+	public void record(String line){
+		try{
+			if(logWriter == null){
+				logWriter = new FileWriter("log.txt");
+			}
+			logWriter.append(line + "\n");
+			logWriter.flush();
+		}
+		catch (IOException e) {
+			System.out.println("logging fail");
+			e.printStackTrace();
+		}
+	}
 
 }

@@ -21,6 +21,9 @@ public class ServerEngine extends Engine{
 	
 	protected void performAction(Message message){
 		System.out.println("server processing message " + message.message);
+		if(message.toLog){
+			state.record(message.message);
+		}
 		
 		String[] tokens = message.message.split("\\$");
 		
