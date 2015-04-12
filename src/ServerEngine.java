@@ -73,6 +73,9 @@ public class ServerEngine extends Engine{
 			state.setGameSettings(tokens[1]);
 			propagateGameSettings();
 			break;
+		case "spawn fake player":
+			spawnFakePlayer(tokens[1]);
+			break;
 		default: 
 			System.out.println("What the hell even is this");	
 		}//end switch
@@ -109,6 +112,15 @@ public class ServerEngine extends Engine{
 			}
 			propagateGameUpdate(state.getGameState());
 			propagateGameSettings();
+		}
+	}
+	
+	private void spawnFakePlayer(String name){
+		playerCounter++;
+		Player newPlayer = new Player(playerCounter, name);
+		state.addPlayer(newPlayer);
+		for(Player player : state.players.values()){
+			propagatePlayerUpdate(Integer.toString(player.id), state.getPlayerState(player));
 		}
 	}
 }

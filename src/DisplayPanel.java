@@ -73,7 +73,7 @@ public class DisplayPanel extends JPanel{
 		JTextField nightField = new JTextField("30");
 		JComboBox serverList = new JComboBox(new String[]{"Choose a server...", "Host server", "Vlad's Resnet"});
 		JButton connectButtonA = new JButton("Connect");
-		JTextField serverField = new JTextField("...or enter IP adress here.");
+		JTextField serverField = new JTextField("...or enter IP address here.");
 		JTextField nameField = new JTextField("Player name");
 		JButton connectButtonB = new JButton("Connect");
 		startButton = new JButton("Start Game...");
@@ -202,7 +202,7 @@ public class DisplayPanel extends JPanel{
 			public void mouseReleased(MouseEvent arg0) {
 				for(Player player : playerViews.keySet()){
 					PlayerView playerView = playerViews.get(player);
-					if(player != state.self && arg0.getX() > playerView.x && arg0.getX() < playerView.rx&& arg0.getY() > playerView.y && arg0.getY() < playerView.ry){
+					if(player != state.self && arg0.getX() > playerView.x && arg0.getX() < playerView.rx&& arg0.getY() > playerView.y && arg0.getY() < playerView.ry + 30){
 						int voteTime = 0;
 						if(state.gamePhase.equals("day")){
 							voteTime = state.daySeconds - state.timeRemaining;
@@ -292,7 +292,7 @@ public class DisplayPanel extends JPanel{
 		super.paintComponent(g);
 		int numPlayers = state.players.values().size();
 		int count = 1;
-		double factor = 0.33;
+		double factor = 0.33*10/(numPlayers+8);
 
 		for(Player player : state.players.values()){
 			if(!playerViews.containsKey(player)){
@@ -333,28 +333,28 @@ public class DisplayPanel extends JPanel{
 			double ry = (this.getHeight()-py-40)/2;
 			double rx = (this.getWidth()-px-40)/2;
 			
-			double ary = (this.getHeight()-2*py-40)/2;
-			double arx = (this.getWidth()-2*px-40)/2;
+			double ary = (this.getHeight()-2*py-80)/2;
+			double arx = (this.getWidth()-2*px-80)/2;
 	
 			double dx = Math.sqrt(arx*arx + ary*ary);
 			
 			if(player == state.self){
-				playerView.x = (int) (rx) + 20;
-				playerView.y = (int) (ry + ry) + 20;
-				playerView.ax = (int) (arx + px + 20);
-				playerView.ay = (int) (ary + py + 20+ 100);
+				playerView.x = (int) (rx) + 10;
+				playerView.y = (int) (ry + ry) + 10;
+				playerView.ax = (int) (arx + px + 40);
+				playerView.ay = (int) (ary + py + 40 + ary * .9);
 			}
 			else{
-				playerView.x = (int) (rx + 20 + Math.cos(Math.PI*2*count/numPlayers - Math.PI/2)*rx);
-				playerView.y = (int) (ry + 20 - Math.sin(Math.PI*2*count/numPlayers - Math.PI/2)*ry);
-				playerView.ax = (int) (arx + px + 20 + Math.cos(Math.PI*2*count/numPlayers - Math.PI/2)*arx*.9);
-				playerView.ay = (int) (ary + py + 20 - Math.sin(Math.PI*2*count/numPlayers - Math.PI/2)*ary*.9);
+				playerView.x = (int) (rx + 10 + Math.cos(Math.PI*2*count/numPlayers - Math.PI/2)*rx);
+				playerView.y = (int) (ry + 10 - Math.sin(Math.PI*2*count/numPlayers - Math.PI/2)*ry);
+				playerView.ax = (int) (arx + px + 40 + Math.cos(Math.PI*2*count/numPlayers - Math.PI/2)*arx*.9);
+				playerView.ay = (int) (ary + py + 40 - Math.sin(Math.PI*2*count/numPlayers - Math.PI/2)*ary*.9);
 				count++;
 			}
 			playerView.rx = (int) (playerView.x + px);
 			playerView.ry = (int) (playerView.y + py);
 			
-			g.drawImage(img,playerView.x,playerView.y, (int)px, (int)py, null);
+			g.drawImage(img,playerView.x,playerView.y+30, (int)px, (int)py, null);
 			
 		}
 		for(Player player : state.players.values()){
@@ -369,8 +369,8 @@ public class DisplayPanel extends JPanel{
 			}
 			g.setColor(fontColor);
 			g.setFont(new Font("Cooper Black", Font.PLAIN, 20));
-			g.drawString((player == state.self ? "YOU - " : "") + player.name + (playerView.visibleRole.equals("unassigned") ? "" : ", " + (player.role.equals("good") ? "Citizen" : "Mafioso")) + (player.aliveDead ? "" : " (Dead)"), playerView.x, playerView.y-5);
-			
+			g.drawString((player == state.self ? "YOU - " : "") + player.name, playerView.x, playerView.y + (playerView.visibleRole.equals("unassigned") ? 20 : 0));
+			g.drawString((playerView.visibleRole.equals("unassigned") ? "" : (player.role.equals("good") ? "Citizen" : "Mafia")) + (player.aliveDead ? "" : " (Dead)"), playerView.x, playerView.y+20);			
 		}
 		
 		if(state.gamePhase.equals("day")){

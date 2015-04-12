@@ -64,6 +64,9 @@ public class ClientEngine extends Engine{
 				state.setGameSettings(tokens[1]);
 			}
 			break;
+		case "spawn fake player":
+			serverConnection.sendMessage("spawn fake player$" + tokens[1]);
+			break;
 		default: 
 			System.out.println("What the hell even is this");
 		
