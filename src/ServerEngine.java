@@ -54,6 +54,7 @@ public class ServerEngine extends Engine{
 		case "start game":
 			state.assignIdentities();
 			for(Player player : state.players.values()){
+				state.record(player.id + " assigned to " + player.role + "  (forced log entry)");
 				propagatePlayerUpdate(Integer.toString(player.id), state.getPlayerState(player));
 			}
 			messages.add(new Message("game transition$startnight", null));

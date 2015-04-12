@@ -1,6 +1,8 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -36,10 +38,10 @@ public class Display extends JFrame{
 		chatList = new JComboBox(new String[]{"Send to: everyone"});
 		textArea = new JTextArea();
 		textAreaScroll = new JScrollPane(textArea);
-		textArea.setMaximumSize(new Dimension(Integer.MAX_VALUE,400));
-		textArea.setPreferredSize(new Dimension(800,400));
-		textAreaScroll.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
-		textAreaScroll.setPreferredSize(new Dimension(1000,150));
+		//textArea.setMaximumSize(new Dimension(Integer.MAX_VALUE,400));
+		//textArea.setPreferredSize(new Dimension(800,400));
+		//textAreaScroll.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
+		textAreaScroll.setPreferredSize(new Dimension(Integer.MAX_VALUE,150));
 		JTextField input = new JTextField();
 		input.setMaximumSize(new Dimension(Integer.MAX_VALUE, input.getMinimumSize().height));
 		displayPanel = new DisplayPanel(state, messages);
@@ -95,9 +97,15 @@ public class Display extends JFrame{
 		chatPanel.add(input);
 		chatPanel.add(chatList);
 		
+		JPanel scrollPanel = new JPanel();
+		scrollPanel.setLayout(new GridLayout(1,1));
+		scrollPanel.add(textAreaScroll);
+		//scrollPanel.setPreferredSize(new Dimension(1000,150));
+		
 		this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 		this.add(displayPanel);
-		this.add(textAreaScroll);
+		//this.add(textAreaScroll);
+		this.add(scrollPanel);
 		this.add(chatPanel);	
 		
 //		this.add(textArea, BorderLayout.SOUTH);
@@ -130,6 +138,7 @@ public class Display extends JFrame{
 		while(!state.chatMessages.isEmpty()){
 			try {
 				textArea.append(state.chatMessages.dequeue() + "\n");
+				textArea.setCaretPosition(textArea.getDocument().getLength());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
