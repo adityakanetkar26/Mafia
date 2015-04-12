@@ -27,6 +27,10 @@ public class Display extends JFrame{
 	JComboBox chatList;
 	HashMap<Integer, Player> chatListMap = new HashMap<Integer, Player>();
 	
+	Color fontColor = new Color(250,125,0);
+	Color baseColor = new Color(20,20,20);
+	Color secColor = new Color(40,40,40);
+	
 	public Display(LinkedBlockingQueue<Message> msgs, GameState s){
 		super("CS 7270");
 		messages = msgs;
@@ -38,23 +42,20 @@ public class Display extends JFrame{
 		chatList = new JComboBox(new String[]{"Send to: everyone"});
 		textArea = new JTextArea();
 		textAreaScroll = new JScrollPane(textArea);
-		//textArea.setMaximumSize(new Dimension(Integer.MAX_VALUE,400));
-		//textArea.setPreferredSize(new Dimension(800,400));
-		//textAreaScroll.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
 		textAreaScroll.setPreferredSize(new Dimension(Integer.MAX_VALUE,150));
 		JTextField input = new JTextField();
 		input.setMaximumSize(new Dimension(Integer.MAX_VALUE, input.getMinimumSize().height));
 		displayPanel = new DisplayPanel(state, messages);
-		textArea.setBackground(new Color(0,40,80));
-		input.setBackground(new Color(0,40,80));
-		chatList.setBackground(new Color(0,40,80));
-		textArea.setForeground(new Color(250,125,0));
-		input.setForeground(new Color(250,125,0));
-		chatList.setForeground(new Color(250,125,0));
+		textArea.setBackground(secColor);
+		input.setBackground(secColor);
+		chatList.setBackground(secColor);
+		textArea.setForeground(fontColor);
+		input.setForeground(fontColor);
+		chatList.setForeground(fontColor);
 		input.setCaretColor(new Color(200,200,200));
-		input.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		textArea.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		chatList.setFont(new Font("Cooper Black", Font.PLAIN, 14));
+		input.setFont(new Font("Cooper Black", Font.PLAIN, 18));
+		textArea.setFont(new Font("Cooper Black", Font.PLAIN, 18));
+		chatList.setFont(new Font("Cooper Black", Font.PLAIN, 18));
 		textArea.setEditable(false);
 		
 		input.addActionListener(new ActionListener(){

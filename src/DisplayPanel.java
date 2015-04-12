@@ -43,23 +43,27 @@ public class DisplayPanel extends JPanel{
 	
 	HashMap<Player, PlayerView> playerViews = new HashMap<Player, PlayerView>();
 	
+	Color fontColor = new Color(250,125,0);
+	Color baseColor = new Color(20,20,20);
+	Color secColor = new Color(40,40,40);
+	
 	public DisplayPanel(GameState s, LinkedBlockingQueue<Message> msgs){
 		state = s;
 		messages = msgs;
 		loadImages();
-		setBackground(new Color(0,20,40));
+		setBackground(baseColor);
 		//setPreferredSize(new Dimension(1000,600));
 		
 		connectPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		connectPanel.setBackground(new Color(0,20,40));
+		connectPanel.setBackground(baseColor);
 		//connectPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
 		//connectPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
 		//connectPanel.setPreferredSize(this.getSize());
 		//connectPanel.setLayout(new BoxLayout(connectPanel, BoxLayout.Y_AXIS));
 		JPanel settingsPanel = new JPanel();
 		settingsPanel.setLayout(new GridLayout(3,2));
-		settingsPanel.setBackground(new Color(0,40,80));
+		settingsPanel.setBackground(secColor);
 		
 		JCheckBox ballotBox = new JCheckBox("Open Ballot", true);
 		JCheckBox privateBox = new JCheckBox("Private Chat", true);
@@ -74,43 +78,43 @@ public class DisplayPanel extends JPanel{
 		JButton connectButtonB = new JButton("Connect");
 		startButton = new JButton("Start Game...");
 		gameLabel = new JLabel("Waiting for game start...");
-		connectButtonA.setForeground(new Color(250,125,0));
-		connectButtonB.setForeground(new Color(250,125,0));
-		startButton.setForeground(new Color(250,125,0));
-		serverField.setForeground(new Color(250,125,0));
-		nameField.setForeground(new Color(250,125,0));
-		serverList.setForeground(new Color(250,125,0));
-		gameLabel.setForeground(new Color(250,125,0));
-		ballotBox.setForeground(new Color(250,125,0));
-		privateBox.setForeground(new Color(250,125,0));
-		dayLabel.setForeground(new Color(250,125,0));
-		nightLabel.setForeground(new Color(250,125,0));
-		dayField.setForeground(new Color(250,125,0));
-		nightField.setForeground(new Color(250,125,0));
-		connectButtonA.setBackground(new Color(0,40,80));
-		connectButtonB.setBackground(new Color(0,40,80));
-		startButton.setBackground(new Color(0,40,80));
-		serverField.setBackground(new Color(0,40,80));
-		nameField.setBackground(new Color(0,40,80));
-		serverList.setBackground(new Color(0,40,80));
-		ballotBox.setBackground(new Color(0,40,80));
-		privateBox.setBackground(new Color(0,40,80));
-		dayField.setBackground(new Color(0,40,80));
-		nightField.setBackground(new Color(0,40,80));
-		dayLabel.setBackground(new Color(0,40,80));
-		nightLabel.setBackground(new Color(0,40,80));
-		connectButtonA.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		connectButtonB.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		startButton.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		serverField.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		nameField.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		serverList.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		ballotBox.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		privateBox.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		dayField.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		nightField.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		dayLabel.setFont(new Font("Cooper Black", Font.PLAIN, 14));
-		nightLabel.setFont(new Font("Cooper Black", Font.PLAIN, 14));
+		connectButtonA.setForeground(fontColor);
+		connectButtonB.setForeground(fontColor);
+		startButton.setForeground(fontColor);
+		serverField.setForeground(fontColor);
+		nameField.setForeground(fontColor);
+		serverList.setForeground(fontColor);
+		gameLabel.setForeground(fontColor);
+		ballotBox.setForeground(fontColor);
+		privateBox.setForeground(fontColor);
+		dayLabel.setForeground(fontColor);
+		nightLabel.setForeground(fontColor);
+		dayField.setForeground(fontColor);
+		nightField.setForeground(fontColor);
+		connectButtonA.setBackground(secColor);
+		connectButtonB.setBackground(secColor);
+		startButton.setBackground(secColor);
+		serverField.setBackground(secColor);
+		nameField.setBackground(secColor);
+		serverList.setBackground(secColor);
+		ballotBox.setBackground(secColor);
+		privateBox.setBackground(secColor);
+		dayField.setBackground(secColor);
+		nightField.setBackground(secColor);
+		dayLabel.setBackground(secColor);
+		nightLabel.setBackground(secColor);
+		connectButtonA.setFont(new Font("Cooper Black", Font.PLAIN, 24));
+		connectButtonB.setFont(new Font("Cooper Black", Font.PLAIN, 24));
+		startButton.setFont(new Font("Cooper Black", Font.PLAIN, 24));
+		serverField.setFont(new Font("Cooper Black", Font.PLAIN, 24));
+		nameField.setFont(new Font("Cooper Black", Font.PLAIN, 24));
+		serverList.setFont(new Font("Cooper Black", Font.PLAIN, 24));
+		ballotBox.setFont(new Font("Cooper Black", Font.PLAIN, 24));
+		privateBox.setFont(new Font("Cooper Black", Font.PLAIN, 24));
+		dayField.setFont(new Font("Cooper Black", Font.PLAIN, 24));
+		nightField.setFont(new Font("Cooper Black", Font.PLAIN, 24));
+		dayLabel.setFont(new Font("Cooper Black", Font.PLAIN, 24));
+		nightLabel.setFont(new Font("Cooper Black", Font.PLAIN, 24));
 		gameLabel.setFont(new Font("Cooper Black", Font.PLAIN, 20));
 
 		connectButtonA.addActionListener(new ActionListener(){
@@ -223,11 +227,11 @@ public class DisplayPanel extends JPanel{
 		
 		ImageIcon icon = new ImageIcon(mafPics[0]);
 		JLabel connectTopLabel = new JLabel("Welcome to Mafia, son", icon, JLabel.CENTER);
-		connectTopLabel.setFont(new Font("Cooper Black", Font.PLAIN, 24));
+		connectTopLabel.setFont(new Font("Cooper Black", Font.PLAIN, 30));
 		connectTopLabel.setHorizontalTextPosition(JLabel.CENTER);
 		connectTopLabel.setVerticalTextPosition(JLabel.BOTTOM);
 		connectTopLabel.setBackground(new Color(50,50,50));
-		connectTopLabel.setForeground(new Color(250,125,0));
+		connectTopLabel.setForeground(fontColor);
 		//connectTopPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, 200));
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -263,7 +267,7 @@ public class DisplayPanel extends JPanel{
 
 		c.gridx = 0;
 		c.gridy = 5;
-		c.weightx = 0.3;
+		c.weightx = 0.5;
 		connectPanel.add(new JLabel(), c);
 		
 		c.gridx = 2;
@@ -271,7 +275,7 @@ public class DisplayPanel extends JPanel{
 		connectPanel.add(new JLabel(), c);
 		
 		c.gridx = 4;
-		c.weightx = 0.3;
+		c.weightx = 0.5;
 		connectPanel.add(new JLabel(), c);
 		
 		this.setLayout(new GridBagLayout());
@@ -355,7 +359,7 @@ public class DisplayPanel extends JPanel{
 		}
 		for(Player player : state.players.values()){
 			PlayerView playerView = playerViews.get(player);
-			g.setColor(new Color(250,125,0));
+			g.setColor(fontColor);
 			if(playerView.visibleVote != null){
 				PlayerView target = playerViews.get(playerView.visibleVote);
 				g.drawLine(playerView.ax, playerView.ay, target.ax, target.ay);
@@ -363,8 +367,8 @@ public class DisplayPanel extends JPanel{
 				g.drawLine(target.ax, target.ay, (int)(target.ax + 10.0*(playerView.ax - target.ax)/dist-5.0*(playerView.ay - target.ay)/dist), (int)(target.ay + 10.0*(playerView.ay - target.ay)/dist+5.0*(playerView.ax - target.ax)/dist));
 				g.drawLine(target.ax, target.ay, (int)(target.ax + 10.0*(playerView.ax - target.ax)/dist+5.0*(playerView.ay - target.ay)/dist), (int)(target.ay + 10.0*(playerView.ay - target.ay)/dist-5.0*(playerView.ax - target.ax)/dist));
 			}
-			g.setColor(new Color(250,125,0));
-			g.setFont(new Font("Cooper Black", Font.PLAIN, 18));
+			g.setColor(fontColor);
+			g.setFont(new Font("Cooper Black", Font.PLAIN, 20));
 			g.drawString((player == state.self ? "YOU - " : "") + player.name + (playerView.visibleRole.equals("unassigned") ? "" : ", " + (player.role.equals("good") ? "Citizen" : "Mafioso")) + (player.aliveDead ? "" : " (Dead)"), playerView.x, playerView.y-5);
 			
 		}

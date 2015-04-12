@@ -1,5 +1,7 @@
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +17,7 @@ public class GameState {
 	HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 	LinkedBlockingQueue<Message> messages;
 	Queue<String> chatMessages = new Queue<String>();
-	FileWriter logWriter;
+	PrintWriter logWriter;
 	
 	int badPlayerCount;
 	int goodPlayerCount;
@@ -292,9 +294,9 @@ public class GameState {
 	public void record(String line){
 		try{
 			if(logWriter == null){
-				logWriter = new FileWriter("log.txt");
+				logWriter = new PrintWriter(new BufferedWriter(new FileWriter("log.txt", true)));
 			}
-			logWriter.append(line + "\n");
+			logWriter.println(line);
 			logWriter.flush();
 		}
 		catch (IOException e) {
