@@ -114,7 +114,7 @@ public class GameState {
 		}
 
 		if(sender == null){
-			chatMessages.enqueue("God" + (receiver == null ? " (to all):  " : " (to " + receiver.name + "):  ") + msg);
+			chatMessages.enqueue("A god of some sort" + (receiver == null ? " (to all):  " : " (to " + receiver.name + "):  ") + msg);
 		}
 		else{
 			if((receiver == null || receiver == self || sender == self) && (gamePhase.equals("awaiting players") || sender.aliveDead) && self!=null)
@@ -171,13 +171,11 @@ public class GameState {
 			messages.put(new Message("game update$phase#night",null));
 			startTimer("game transition$endnight", nightSeconds);
 			announce("night phase: only mafia can chat and vote, and only mafia can see messages and votes.", false);
-			announce(announceSettings(), false);
 			break;
 		case "startday":
 			messages.put(new Message("game update$phase#day",null));
 			startTimer("game transition$endday", daySeconds);
 			announce("day phase: all living players can chat, see messages, and vote.", false);
-			announce(announceSettings(), false);
 			break;
 
 		default:
@@ -325,8 +323,8 @@ public class GameState {
 		}
 	}
 	
-	private String announceSettings(){
-		return "[current game settings: " + "private chat " + (privateChat? "enabled" : "disabled") + ", open ballot " + (openBallot? "enabled" : "disabled") + "]";
+	public void announceSettings(){
+		announce("[current game settings: " + "private chat " + (privateChat? "enabled" : "disabled") + ", open ballot " + (openBallot? "enabled" : "disabled") + "]", false);
 	}
 
 }

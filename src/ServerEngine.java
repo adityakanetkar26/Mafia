@@ -57,6 +57,7 @@ public class ServerEngine extends Engine{
 				state.record(player.id + " assigned to " + player.role + "  (forced log entry)");
 				propagatePlayerUpdate(Integer.toString(player.id), state.getPlayerState(player));
 			}
+			state.announceSettings();
 			messages.add(new Message("game transition$startnight", null));
 			break;
 		case "chat":	
