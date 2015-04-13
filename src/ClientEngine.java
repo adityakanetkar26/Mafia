@@ -4,7 +4,7 @@ public class ClientEngine extends Engine{
 	NetConnection serverConnection;
 	
 	protected void performAction(Message message){
-		System.out.println("client processing message " + message.message);
+		//System.out.println("client processing message " + message.message);
 		
 		String[] tokens = message.message.split("\\$");
 		//System.out.println(tokens[0]);

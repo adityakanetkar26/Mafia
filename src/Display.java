@@ -69,6 +69,13 @@ public class Display extends JFrame{
 							e.printStackTrace();
 						}
 					}
+					else if(input.getText().startsWith("godspeak/")){
+						try {
+							messages.put(new Message("chat$null$all$" + input.getText().substring(9), null));
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
 					else{
 						if(state.self != null){
 							try {

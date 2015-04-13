@@ -104,16 +104,24 @@ public class GameState {
 	}
 	
 	public void processChat(String s, String r, String msg){
-		Player sender = players.get(Integer.parseInt(s));
+		Player sender = null;
+		if(!s.equals("null")){
+			sender = players.get(Integer.parseInt(s));
+		}
 		Player receiver = null;
 		if(!r.equals("all")){
 			receiver = players.get(Integer.parseInt(r));
 		}
 
-		if((receiver == null || receiver == self || sender == self) && (gamePhase.equals("awaiting players") || sender.aliveDead) && self!=null)
-		{
-			if(!(gamePhase.equals("night") && self.isAliveOrDead() && !(self.role.equals("bad") && sender.role.equals("bad")))){
-				chatMessages.enqueue(sender.name + (receiver == null ? " (to all):  " : " (to " + receiver.name + "):  ") + msg);
+		if(sender == null){
+			chatMessages.enqueue("God" + (receiver == null ? " (to all):  " : " (to " + receiver.name + "):  ") + msg);
+		}
+		else{
+			if((receiver == null || receiver == self || sender == self) && (gamePhase.equals("awaiting players") || sender.aliveDead) && self!=null)
+			{
+				if(!(gamePhase.equals("night") && self.isAliveOrDead() && !(self.role.equals("bad") && sender.role.equals("bad")))){
+					chatMessages.enqueue(sender.name + (receiver == null ? " (to all):  " : " (to " + receiver.name + "):  ") + msg);
+				}
 			}
 		}
 	}
@@ -162,10 +170,14 @@ public class GameState {
 		case "startnight":
 			messages.put(new Message("game update$phase#night",null));
 			startTimer("game transition$endnight", nightSeconds);
+			announce("night phase: only mafia can chat and vote, and only mafia can see messages and votes.", false);
+			announce(announceSettings(), false);
 			break;
 		case "startday":
 			messages.put(new Message("game update$phase#day",null));
 			startTimer("game transition$endday", daySeconds);
+			announce("day phase: all living players can chat, see messages, and vote.", false);
+			announce(announceSettings(), false);
 			break;
 
 		default:
@@ -303,6 +315,18 @@ public class GameState {
 			System.out.println("logging fail");
 			e.printStackTrace();
 		}
+	}
+	
+	public void announce(String msg, boolean record){
+		try {
+			messages.put(new Message("chat$null$all$" + msg, null, record));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private String announceSettings(){
+		return "[current game settings: " + "private chat " + (privateChat? "enabled" : "disabled") + ", open ballot " + (openBallot? "enabled" : "disabled") + "]";
 	}
 
 }
