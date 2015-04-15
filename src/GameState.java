@@ -41,7 +41,7 @@ public class GameState {
 	
 	public void assignIdentities(){
 		int totalSize = players.size();
-		badPlayerCount = (int)Math.sqrt((double)totalSize);
+		badPlayerCount = Math.min(2,(int)Math.sqrt((double)totalSize));
 		goodPlayerCount = totalSize - badPlayerCount;
 
 		ArrayList<Player> unassignedPeople = new ArrayList<Player>();
